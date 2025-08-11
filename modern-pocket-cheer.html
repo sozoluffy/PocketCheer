@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Obuna's Pocket Cheer ✨ Your Daily Dose of Joy</title>
+<meta name="description" content="An interactive mood booster with compliments, jokes, virtual hugs, and mini-games to brighten your day" />
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --primary: #ff6b6b;
+    --secondary: #4ecdc4;
+    --accent: #ffe66d;
+    --purple: #c77dff;
+    --blue: #7209b7;
+    --dark: #2d3436;
+    --light: #ffffff;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: var(--light);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(255, 230, 109, 0.2) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(-20px, -20px) rotate(1deg); }
+    66% { transform: translate(20px, -10px) rotate(-1deg); }
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: slideDown 0.8s ease-out;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, var(--accent), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 300;
+  }
+
+  /* Personalization Bar */
+  .personalize-bar {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    animation: slideUp 0.8s ease-out 0.2s both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  input[type="text"], select {
+    padding: 0.7rem 1.2rem;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--dark);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .btn:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  }
+
+  .btn-accent {
+    background: linear-gradient(45deg, var(--accent), var(--purple));
+    color: var(--dark);
+  }
+
+  .btn-glass {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    color: white;
+  }
+
+  /* Cards Grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    animation: cardAppear 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.1s; }
+  .card:nth-child(2) { animation-delay: 0.2s; }
+  .card:nth-child(3) { animation-delay: 0.3s; }
+  .card:nth-child(4) { animation-delay: 0.4s; }
+
+  @keyframes cardAppear {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+  }
+
+  .output-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+  }
+
+  .output-box.active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
+  }
+
+  /* Virtual Hug Card */
+  .hug-container {
+    position: relative;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(199, 125, 255, 0.2));
+  }
+
+  .heart-animation {
+    position: relative;
+    width: 100px;
+    height: 90px;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0% { transform: scale(1); }
+    14% { transform: scale(1.3); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.3); }
+    70% { transform: scale(1); }
+  }
+
+  .heart-animation:before,
+  .heart-animation:after {
+    content: '';
+    position: absolute;
+    left: 50px;
+    top: 0;
+    width: 50px;
+    height: 80px;
+    background: linear-gradient(45deg, #ff6b6b, #ff8787);
+    border-radius: 50px 50px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+  }
+
+  .heart-animation:after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+  }
+
+  /* Bubble Game */
+  .game-container {
+    position: relative;
+    height: 250px;
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(255, 230, 109, 0.2));
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 1rem;
+  }
+
+  .bubble {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(78, 205, 196, 0.6));
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), inset -5px -5px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: floatBubble 4s ease-in-out infinite;
+  }
+
+  @keyframes floatBubble {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  .bubble:hover {
+    transform: scale(1.1);
+  }
+
+  .bubble.pop {
+    animation: pop 0.3s ease-out forwards;
+  }
+
+  @keyframes pop {
+    to {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  .score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--dark);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+  }
+
+  /* Message Composer */
+  .composer {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    animation: slideUp 0.8s ease-out 0.5s both;
+  }
+
+  .composer h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--dark);
+    font-size: 1rem;
+    resize: vertical;
+    transition: all 0.3s ease;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  /* Confetti */
+  .confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9999;
+  }
+
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    animation: confettiFall 3s linear forwards;
+  }
+
+  @keyframes confettiFall {
+    to {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* Emoji Rain */
+  .emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: emojiFloat 4s linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes emojiFloat {
+    to {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .personalize-bar { flex-direction: column; }
+  }
+
+  /* Fun cursor trail effect */
+  .cursor-trail {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, var(--accent), transparent);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: fadeOut 1s ease-out forwards;
+    z-index: 9998;
+  }
+
+  @keyframes fadeOut {
+    to { opacity: 0; transform: scale(0); }
+  }
+</style>
+</head>
+<body>
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="container">
+  <header class="header">
+    <div class="logo">✨</div>
+    <h1>Obuna's Pocket Cheer</h1>
+    <p class="subtitle">Your personal happiness generator</p>
+  </header>
+
+  <div class="personalize-bar">
+    <div class="input-group">
+      <label for="nameInput">Name:</label>
+      <input type="text" id="nameInput" placeholder="Your friend's name" />
+    </div>
+    <div class="input-group">
+      <label for="moodSelect">Mood:</label>
+      <select id="moodSelect">
+        <option value="gentle">🌸 Gentle</option>
+        <option value="energetic">⚡ Energetic</option>
+        <option value="silly">🎪 Silly</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" id="surpriseBtn">
+      <span>✨ Surprise Me!</span>
+    </button>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card">
+      <h2><span class="card-icon">💝</span> Compliment Generator</h2>
+      <button class="btn btn-accent" id="complimentBtn">Generate Compliment</button>
+      <div class="output-box" id="complimentOutput">Click for some love!</div>
+      <button class="btn btn-glass" data-add="compliment">Add to message ➕</button>
+    </div>
+
+    <div class="card">
+      <h2><span class="card-icon">😄</span> Joke Machine</h2>
+      <button class="btn btn-accent" id="jokeBtn">Tell Me a Joke</button>
+      <div class="output-box" id="jokeOutput">Ready to laugh?</div>
+      <button class="btn btn-glass" data-add="joke">Add to message ➕</button>
+    </div>
+
+    <div class="card">
+      <h2><span class="card-icon">🤗</span> Virtual Hug</h2>
+      <button class="btn btn-primary" id="hugBtn">Send a Hug 💖</button>
+      <div class="hug-container">
+        <div class="heart-animation" id="heart"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="card-icon">🎯</span> Bubble Pop Challenge</h2>
+      <button class="btn btn-accent" id="startGameBtn">Start Game</button>
+      <div class="game-container" id="gameContainer">
+        <div class="score" id="scoreDisplay">Score: 0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="composer">
+    <h2>📝 Your Happiness Message</h2>
+    <textarea id="messageArea" placeholder="Your personalized message will appear here..."></textarea>
+    <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+      <button class="btn btn-primary" id="copyBtn">Copy Message 📋</button>
+      <button class="btn btn-glass" id="clearBtn">Clear All</button>
+      <button class="btn btn-accent" id="shareBtn">Share Joy 🎉</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Modern interactive features
+const $ = (id) => document.getElementById(id);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+// Data
+const content = {
+  compliments: {
+    gentle: [
+      "Your presence makes the world a little brighter ✨",
+      "You have a heart made of pure gold 💛",
+      "You're doing amazing, even on the hard days 🌸",
+      "Your kindness creates ripples of joy 🌊",
+      "You're exactly where you need to be right now 🌱"
+    ],
+    energetic: [
+      "You're an absolute LEGEND! 🚀",
+      "Your energy could power a small city! ⚡",
+      "You're the main character and everyone knows it! 👑",
+      "Breaking news: You're crushing it! 📰",
+      "You're a walking, talking miracle! 🌟"
+    ],
+    silly: [
+      "You're like a human disco ball - impossibly shiny! ✨",
+      "If you were a vegetable, you'd be a cute-cumber! 🥒",
+      "You're the human equivalent of a perfect high-five! 🙌",
+      "Scientists just confirmed: you're 100% awesome! 🔬",
+      "You put the 'pro' in 'procrastination' (productively)! 😎"
+    ]
+  },
+  jokes: {
+    gentle: [
+      "What do you call a bear with no teeth? A gummy bear! 🐻",
+      "Why don't eggs tell jokes? They'd crack up! 🥚",
+      "What's a flower's favorite drink? Root beer! 🌻",
+      "Why did the cookie go to the doctor? It felt crumbly! 🍪",
+      "What do clouds wear? Thunderwear! ☁️"
+    ],
+    energetic: [
+      "I'm reading a book about anti-gravity. It's impossible to put down! 📚",
+      "Why don't scientists trust atoms? They make up everything! ⚛️",
+      "Time flies like an arrow. Fruit flies like a banana! 🍌",
+      "I used to hate facial hair, but then it grew on me! 🧔",
+      "Parallel lines have so much in common. Too bad they'll never meet! 📐"
+    ],
+    silly: [
+      "My therapist says I have a preoccupation with vengeance. We'll see about that! 😈",
+      "I told my wife she was drawing her eyebrows too high. She looked surprised! 😲",
+      "Why did the scarecrow win an award? He was outstanding in his field! 🌾",
+      "I don't trust stairs. They're always up to something! 🪜",
+      "Did you hear about the claustrophobic astronaut? He needed space! 🚀"
+    ]
+  }
+};
+
+// Personalization
+function personalize(text) {
+  const name = $('nameInput').value.trim();
+  if (!name) return text;
+  return text.replace(/\byou\b/gi, name).replace(/\byour\b/gi, `${name}'s`);
+}
+
+// Random selection
+function random(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Cursor trail effect
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+setInterval(() => {
+  const trail = document.createElement('div');
+  trail.className = 'cursor-trail';
+  trail.style.left = mouseX + 'px';
+  trail.style.top = mouseY + 'px';
+  document.body.appendChild(trail);
+  setTimeout(() => trail.remove(), 1000);
+}, 100);
+
+// Confetti effect
+function createConfetti() {
+  const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#c77dff', '#7209b7'];
+  const confettiCount = 100;
+  
+  for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.backgroundColor = random(colors);
+    confetti.style.animationDelay = Math.random() * 3 + 's';
+    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+    $('confettiContainer').appendChild(confetti);
+    
+    setTimeout(() => confetti.remove(), 3000);
+  }
+}
+
+// Emoji rain
+function emojiRain(emoji = '💖') {
+  for (let i = 0; i < 20; i++) {
+    const emojiEl = document.createElement('div');
+    emojiEl.className = 'emoji';
+    emojiEl.textContent = emoji;
+    emojiEl.style.left = Math.random() * 100 + '%';
+    emojiEl.style.animationDelay = Math.random() * 2 + 's';
+    document.body.appendChild(emojiEl);
+    
+    setTimeout(() => emojiEl.remove(), 4000);
+  }
+}
+
+// Compliment generator
+$('complimentBtn').addEventListener('click', () => {
+  const mood = $('moodSelect').value;
+  const compliment = personalize(random(content.compliments[mood]));
+  $('complimentOutput').textContent = compliment;
+  $('complimentOutput').classList.add('active');
+  setTimeout(() => $('complimentOutput').classList.remove('active'), 300);
+});
+
+// Joke generator
+$('jokeBtn').addEventListener('click', () => {
+  const mood = $('moodSelect').value;
+  const joke = random(content.jokes[mood]);
+  $('jokeOutput').textContent = joke;
+  $('jokeOutput').classList.add('active');
+  setTimeout(() => $('jokeOutput').classList.remove('active'), 300);
+});
+
+// Virtual hug
+$('hugBtn').addEventListener('click', () => {
+  createConfetti();
+  emojiRain('🤗');
+  $('heart').style.animation = 'none';
+  setTimeout(() => $('heart').style.animation = 'heartbeat 1.5s ease-in-out infinite', 10);
+  
+  const hugMessage = personalize("Sending you the biggest, warmest virtual hug! 🤗💖");
+  addToMessage(hugMessage);
+  
+  // Haptic feedback if available
+  if (navigator.vibrate) {
+    navigator.vibrate([100, 50, 100]);
+  }
+});
+
+// Bubble game
+let score = 0;
+let gameActive = false;
+
+function createBubble() {
+  if (!gameActive) return;
+  
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.style.left = Math.random() * 80 + 10 + '%';
+  bubble.style.top = Math.random() * 80 + 10 + '%';
+  bubble.style.animationDuration = (3 + Math.random() * 2) + 's';
+  
+  bubble.addEventListener('click', () => {
+    if (!bubble.classList.contains('pop')) {
+      bubble.classList.add('pop');
+      score++;
+      $('scoreDisplay').textContent = `Score: ${score}`;
+      
+      if (score % 10 === 0) {
+        createConfetti();
+        addToMessage(personalize(`You popped ${score} bubbles! You're amazing! 🎯`));
+      }
+    }
+  });
+  
+  $('gameContainer').appendChild(bubble);
+  
+  setTimeout(() => bubble.remove(), 5000);
+}
+
+$('startGameBtn').addEventListener('click', () => {
+  score = 0;
+  gameActive = true;
+  $('scoreDisplay').textContent = 'Score: 0';
+  $('gameContainer').innerHTML = '<div class="score" id="scoreDisplay">Score: 0</div>';
+  
+  // Create bubbles periodically
+  const gameInterval = setInterval(() => {
+    if (gameActive) {
+      createBubble();
+    } else {
+      clearInterval(gameInterval);
+    }
+  }, 800);
+  
+  // Stop game after 30 seconds
+  setTimeout(() => {
+    gameActive = false;
+    emojiRain('🏆');
+    addToMessage(personalize(`Game over! You scored ${score} points! 🎉`));
+  }, 30000);
+});
+
+// Message management
+function addToMessage(text) {
+  const current = $('messageArea').value;
+  $('messageArea').value = current ? `${current}\n\n${text}` : text;
+  $('messageArea').scrollTop = $('messageArea').scrollHeight;
+}
+
+// Add buttons functionality
+$$('[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.dataset.add;
+    const content = type === 'compliment' ? $('complimentOutput').textContent : $('jokeOutput').textContent;
+    if (content && content !== 'Click for some love!' && content !== 'Ready to laugh?') {
+      addToMessage(content);
+    }
+  });
+});
+
+// Surprise button
+$('surpriseBtn').addEventListener('click', () => {
+  // Generate random content
+  $('complimentBtn').click();
+  setTimeout(() => $('jokeBtn').click(), 100);
+  
+  // Fun effects
+  createConfetti();
+  emojiRain('✨');
+  
+  // Random name suggestions
+  const names = ['Superstar', 'Champion', 'Legend', 'Sunshine', 'Rockstar'];
+  if (!$('nameInput').value) {
+    $('nameInput').value = random(names);
+  }
+});
+
+// Copy message
+$('copyBtn').addEventListener('click', async () => {
+  const message = $('messageArea').value || personalize("Thinking of you and sending positive vibes! ✨");
+  
+  try {
+    await navigator.clipboard.writeText(message);
+    $('copyBtn').textContent = 'Copied! ✅';
+    emojiRain('📋');
+    setTimeout(() => $('copyBtn').textContent = 'Copy Message 📋', 2000);
+  } catch (err) {
+    alert('Message copied:\n\n' + message);
+  }
+});
+
+// Clear message
+$('clearBtn').addEventListener('click', () => {
+  $('messageArea').value = '';
+  $('complimentOutput').textContent = 'Click for some love!';
+  $('jokeOutput').textContent = 'Ready to laugh?';
+  score = 0;
+  $('scoreDisplay').textContent = 'Score: 0';
+});
+
+// Share functionality
+$('shareBtn').addEventListener('click', () => {
+  const message = $('messageArea').value || "Check out Pocket Cheer - it made my day brighter!";
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'Pocket Cheer Message',
+      text: message
+    });
+  } else {
+    createConfetti();
+    emojiRain('🎉');
+    addToMessage("\n\n--- Shared with joy! ---");
+  }
+});
+
+// Initial animation
+window.addEventListener('load', () => {
+  setTimeout(() => emojiRain('✨'), 1000);
+});
+</script>
+</body>
+</html>
