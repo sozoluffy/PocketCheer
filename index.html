@@ -1,656 +1,574 @@
 <!DOCTYPE html>
-<html lang="mn">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>3 кубитын квант компьютер — World Quantum Day 2026</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green AI Factory — 64-GPU Blueprint: from land to economics</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --bg:#07070d;--surface:#11111c;--surface2:#171724;--border:rgba(255,255,255,.08);
-    --text:#f4f4fb;--muted:rgba(255,255,255,.58);--dim:rgba(255,255,255,.34);
-    --accent:#8b5cf6;--accent2:#22d3ee;--warn:#facc15;--danger:#fb7185;
-    --q0:#38bdf8;--q1:#fb923c;--q2:#4ade80;
-    --mono:'IBM Plex Mono',monospace;--sans:'Inter',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  .viz-root {
+    color-scheme: light;
+    --surface-1:#fcfcfb; --page:#f9f9f7;
+    --ink-1:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,0.10);
+    --s1:#2a78d6; --s1-deep:#1c5cab; --s1-light:#cde2fb; --s1-wash:rgba(42,120,214,0.14);
+    --s2:#eb6834; --s2-wash:rgba(235,104,52,0.13);
+    --s3:#1baf7a; --s3-wash:rgba(27,175,122,0.15);
+    --neg:#d03b3b; --pos:#0ca30c;
   }
-  body{
-    min-height:100vh;background:
-      radial-gradient(circle at 20% 0%, rgba(56,189,248,.16), transparent 34%),
-      radial-gradient(circle at 80% 10%, rgba(139,92,246,.18), transparent 32%),
-      radial-gradient(circle at 50% 100%, rgba(74,222,128,.08), transparent 34%),
-      var(--bg);
-    color:var(--text);font-family:var(--sans);padding:22px;
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1:#1a1a19; --page:#0d0d0d; --ink-1:#fff; --ink-2:#c3c2b7; --muted:#898781;
+      --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+      --s1:#3987e5; --s1-deep:#86b6ef; --s1-light:#184f95; --s1-wash:rgba(57,135,229,0.20);
+      --s2:#d95926; --s2-wash:rgba(217,89,38,0.18);
+      --s3:#199e70; --s3-wash:rgba(25,158,112,0.22);
+    }
   }
-  .app{max-width:1180px;margin:0 auto}
-  header{text-align:center;margin:4px 0 24px}
-  .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);border-radius:999px;padding:7px 12px;margin-bottom:12px;font-size:.7rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
-  .pulse{width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 6px rgba(34,211,238,.12)}
-  h1{font-size:clamp(2rem,4vw,4.4rem);line-height:.98;letter-spacing:-.055em;font-weight:800;background:linear-gradient(90deg,#fff,#a5b4fc,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
-  header p{max-width:720px;margin:12px auto 0;color:var(--muted);font-size:.95rem;line-height:1.55}
-  .qubits{display:flex;gap:10px;margin:0 0 18px;justify-content:center;flex-wrap:wrap}
-  .qubit-chip{font-family:var(--mono);font-size:.75rem;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.035);display:flex;align-items:center;gap:8px;color:var(--muted)}
-  .dot{width:9px;height:9px;border-radius:50%}.q0{background:var(--q0)}.q1{background:var(--q1)}.q2{background:var(--q2)}
-  .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}@media(max-width:920px){.layout{grid-template-columns:1fr}}
-  .stack{display:flex;flex-direction:column;gap:14px}
-  .card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.026));border:1px solid var(--border);border-radius:20px;padding:16px;box-shadow:0 24px 60px rgba(0,0,0,.18);backdrop-filter:blur(14px)}
-  .card h2{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:13px;font-weight:700}
-  .subgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:560px){.subgrid{grid-template-columns:1fr}}
-  .gate-section{margin-bottom:14px}.gate-section:last-child{margin-bottom:0}
-  .label{font-size:.56rem;color:var(--dim);letter-spacing:.17em;text-transform:uppercase;margin-bottom:7px;font-weight:700}
-  .gate-row{display:flex;flex-wrap:wrap;gap:7px}
-  button,.select{
-    font-family:var(--mono);font-size:.74rem;font-weight:700;padding:8px 12px;border-radius:10px;border:1px solid var(--border);
-    background:rgba(255,255,255,.035);color:var(--text);cursor:pointer;transition:transform .15s,border-color .15s,background .15s,color .15s;
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1:#1a1a19; --page:#0d0d0d; --ink-1:#fff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+    --s1:#3987e5; --s1-deep:#86b6ef; --s1-light:#184f95; --s1-wash:rgba(57,135,229,0.20);
+    --s2:#d95926; --s2-wash:rgba(217,89,38,0.18);
+    --s3:#199e70; --s3-wash:rgba(25,158,112,0.22);
   }
-  button:hover{background:rgba(139,92,246,.13);border-color:rgba(139,92,246,.55);transform:translateY(-1px)}
-  button.active{border-color:var(--accent2);background:rgba(34,211,238,.12);color:#e0fbff}
-  button.measure{background:rgba(250,204,21,.10);border-color:rgba(250,204,21,.25);color:var(--warn)}
-  button.reset{background:rgba(251,113,133,.09);border-color:rgba(251,113,133,.24);color:#fecdd3}
-  .select{appearance:none;padding-right:28px;background:rgba(255,255,255,.04);color:#fff;min-width:80px}.select option{background:#11111c;color:#fff}
-  .pair{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.arrow{color:var(--dim);font-family:var(--mono);font-weight:700}
-  .preset-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}@media(max-width:560px){.preset-row{grid-template-columns:1fr}}
-  .hint{font-size:.75rem;color:var(--muted);line-height:1.5;margin-top:8px}.hint strong{color:#fff}
-  .state-vector{display:flex;flex-direction:column;gap:7px}
-  .sv-row{display:grid;grid-template-columns:64px 1fr 58px 80px 32px;gap:8px;align-items:center;font-family:var(--mono);font-size:.75rem;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.065)}
-  @media(max-width:560px){.sv-row{grid-template-columns:56px 1fr 52px 28px}.sv-amp{display:none}}
-  .sv-label{font-weight:700;color:#fff}.sv-bar-wrap{height:22px;background:rgba(255,255,255,.055);border-radius:8px;overflow:hidden;position:relative}.sv-bar{height:100%;border-radius:8px;transition:width .25s ease}.sv-prob{text-align:right;color:var(--muted);font-weight:700}.sv-amp{color:var(--dim);font-size:.65rem;white-space:nowrap;text-align:right}.sv-phase{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.16);position:relative;margin:auto}.sv-phase-dot{width:7px;height:7px;border-radius:50%;position:absolute;transform:translate(-50%,-50%)}
-  .circuit-wrap{overflow-x:auto;padding-bottom:2px}.circuit-placeholder{font-size:.75rem;color:var(--dim);text-align:center;padding:22px;font-style:italic}.circuit{display:none;flex-direction:column;gap:0;min-width:max-content}.wire{display:flex;align-items:center;height:36px}.wire-label{width:32px;flex:0 0 32px;text-align:center;font-family:var(--mono);font-size:.68rem;font-weight:700}.wire-line{display:flex;align-items:center;min-height:36px;position:relative}.wire-line::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(255,255,255,.13)}.circuit-cell{width:42px;height:36px;position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 42px}.v-connector{position:absolute;left:50%;width:2px;background:rgba(139,92,246,.7);transform:translateX(-50%);z-index:1}.v-mid{top:0;bottom:0}.v-top{top:50%;bottom:0}.v-bottom{top:0;bottom:50%}.gate-marker{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.62rem;font-weight:800;position:relative;z-index:2;border:1px solid}.wire-dot{width:11px;height:11px;border-radius:50%;background:var(--accent);position:relative;z-index:2;box-shadow:0 0 0 5px rgba(139,92,246,.13)}
-  .log{max-height:116px;overflow-y:auto;font-family:var(--mono);font-size:.64rem;color:var(--dim);padding:10px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.045);border-radius:12px}.log div{padding:2px 0}.op{color:#c4b5fd}.meas{color:#fde68a}.resetText{color:#fecdd3}
-  .bloch-row{display:flex;gap:13px;justify-content:center;flex-wrap:wrap}.bloch-container{text-align:center}.bloch-label{font-family:var(--mono);font-size:.75rem;font-weight:800;margin-bottom:6px}.bloch-canvas{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:16px}.bloch-stats{margin-top:6px;font-family:var(--mono);font-size:.58rem;line-height:1.45;color:var(--muted);display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.bloch-stats span{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:7px;padding:3px 4px}.bloch-note{font-size:.68rem;color:var(--dim);margin-top:6px;line-height:1.4}
-  .explain{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}@media(max-width:720px){.explain{grid-template-columns:1fr}}.mini{background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:14px;padding:12px}.mini b{display:block;font-size:.76rem;margin-bottom:4px}.mini span{font-size:.72rem;color:var(--muted);line-height:1.45}
-
-  .header-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}
-  .primary-link,.secondary-link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-family:var(--mono);font-size:.72rem;font-weight:800;border-radius:999px;padding:10px 15px;border:1px solid var(--border);transition:transform .15s,border-color .15s,background .15s;color:#fff}
-  .primary-link{background:linear-gradient(90deg,rgba(139,92,246,.9),rgba(34,211,238,.75));border-color:rgba(255,255,255,.18);box-shadow:0 14px 40px rgba(34,211,238,.10)}
-  .secondary-link{background:rgba(255,255,255,.04);color:var(--muted)}
-  .primary-link:hover,.secondary-link:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.32)}
-  .mission-card{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(34,211,238,.10),rgba(255,255,255,.035));border-color:rgba(103,232,249,.22)}
-  .mission-card::before{content:'';position:absolute;inset:-80px auto auto -80px;width:180px;height:180px;border-radius:50%;background:rgba(34,211,238,.16);filter:blur(22px)}
-  .mission-content{position:relative;z-index:1}
-  .mission-kicker{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#67e8f9;font-weight:800;margin-bottom:8px}
-  .mission-title{font-size:1.25rem;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
-  .mission-text{font-size:.82rem;color:var(--muted);line-height:1.55;margin-bottom:12px}
-  .mission-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-  .mission-btn{display:inline-flex;text-decoration:none;font-family:var(--mono);font-size:.72rem;font-weight:800;color:#061018;background:#67e8f9;border-radius:999px;padding:10px 14px;border:1px solid rgba(255,255,255,.25)}
-  .mission-btn:hover{transform:translateY(-1px)}
-  .challenge-status{font-family:var(--mono);font-size:.68rem;color:var(--muted);background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:8px 10px}
-  .challenge-status.unlocked{color:#bbf7d0;border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.10)}
-
+  body{margin:0;background:var(--page);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;}
+  .viz-root{max-width:1140px;margin:0 auto;padding:30px 20px 60px;color:var(--ink-1);}
+  h1{font-size:23px;margin:0 0 4px;font-weight:700;}
+  .sub{color:var(--ink-2);font-size:13.5px;margin:0 0 22px;max-width:860px;line-height:1.5;}
+  .layer{background:var(--surface-1);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:16px;}
+  .lhead{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;}
+  .lnum{font-size:12px;font-weight:700;color:var(--s1);letter-spacing:.06em;background:var(--s1-wash);padding:3px 9px;border-radius:99px;flex:none;}
+  .lhead h2{font-size:16.5px;margin:0;font-weight:650;}
+  .lhead .why{color:var(--muted);font-size:12.5px;margin-left:auto;text-align:right;}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;}
+  .cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  @media(max-width:820px){.cols,.cols3{grid-template-columns:1fr;}}
+  svg{width:100%;height:auto;display:block;}
+  svg text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;}
+  th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--baseline);padding:5px 8px;}
+  td{padding:5px 8px;border-bottom:1px solid var(--grid);}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;}
+  tr.tot td{font-weight:700;border-top:2px solid var(--baseline);border-bottom:none;}
+  .note{color:var(--muted);font-size:12px;line-height:1.55;margin-top:10px;}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:13px;align-content:start;}
+  .kv .k{color:var(--ink-2);}
+  .kv .v{font-weight:600;text-align:right;font-variant-numeric:tabular-nums;}
+  .flow{display:flex;gap:0;align-items:center;margin:6px 0 2px;flex-wrap:wrap;}
+  .chip{background:var(--s1-wash);border:1px solid var(--s1);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;}
+  .arr{color:var(--muted);padding:0 8px;font-size:15px;}
+  .controls{display:flex;gap:18px;flex-wrap:wrap;background:var(--surface-1);border:1px solid var(--border);border-radius:14px;padding:14px 20px;margin-bottom:16px;position:sticky;top:8px;z-index:5;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+  .ctl{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-2);}
+  .ctl b{color:var(--ink-1);font-size:13px;}
+  .seg{display:flex;border:1px solid var(--baseline);border-radius:8px;overflow:hidden;}
+  .seg button{border:0;background:transparent;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2);font-family:inherit;}
+  .seg button.on{background:var(--s1);color:#fff;font-weight:600;}
+  input[type=range]{width:170px;accent-color:var(--s1);}
+  .hero{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+  @media(max-width:820px){.hero{grid-template-columns:repeat(2,1fr);}}
+  .ht{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:12px 14px;}
+  .ht .k{font-size:11.5px;color:var(--ink-2);}
+  .ht .v{font-size:22px;font-weight:700;margin-top:2px;}
+  .ht .n{font-size:11px;color:var(--muted);margin-top:2px;}
+  .warn{border-left:3px solid var(--s2);padding:8px 12px;background:var(--s2-wash);border-radius:0 8px 8px 0;font-size:12.5px;margin-top:10px;line-height:1.5;}
 </style>
 </head>
 <body>
-<div class="app">
-  <header>
-    <div class="badge"><span class="pulse"></span>World Quantum Day 2026</div>
-    <h1>3 кубитын квант компьютер</h1>
-    <p>Жижиг квант хэлхээ угсраад, төлөвийн вектор хэрхэн өөрчлөгдөхийг харж, кубит бүрийн Bloch векторыг ажиглаарай. Хэмжилт хийхэд квант төлөв collapse буюу нэг үр дүнд нурна.</p>
-    <div class="header-actions">
-      <a class="primary-link" href="https://www.uih.mn/petition/view/401" target="_blank" rel="noopener">AI ашиглах эрхийг дэмжих</a>
-      <a class="secondary-link" href="#mission">Квант даалгавар ↓</a>
-    </div>
-  </header>
+<div class="viz-root">
+  <h1>Green AI Factory — the 64-GPU build, from the ground up</h1>
+  <p class="sub">One blueprint where the physical design and the economics are the same numbers. Read it bottom-up: land → power → facility → racks → compute → bill of materials → economics. Every figure traces to the GAF energy doc, the area sizing doc, and the corrected April-2026 TCO. Change the scenario controls — everything below recomputes, matching the Excel model.</p>
 
-  <div class="qubits">
-    <div class="qubit-chip"><span class="dot q0"></span>q0 = хамгийн зүүн талын бит</div>
-    <div class="qubit-chip"><span class="dot q1"></span>q1</div>
-    <div class="qubit-chip"><span class="dot q2"></span>q2 = хамгийн баруун талын бит</div>
-  </div>
-
-  <div class="layout">
-    <div class="stack">
-      <div class="card">
-        <h2>Квант үйлдлүүд турших</h2>
-        <div class="gate-section">
-          <div class="label">Нэг кубитын бай</div>
-          <div class="gate-row" id="singleTargetButtons">
-            <button class="active" onclick="setSingleTarget(0)">q0</button>
-            <button onclick="setSingleTarget(1)">q1</button>
-            <button onclick="setSingleTarget(2)">q2</button>
-          </div>
-        </div>
-        <div class="gate-section">
-          <div class="label">Нэг кубитын квант үйлдлүүд</div>
-          <div class="gate-row">
-            <button onclick="applyGate('H')" title="Hadamard: superposition үүсгэнэ">H</button>
-            <button onclick="applyGate('X')" title="Pauli-X: бит эргүүлнэ">X</button>
-            <button onclick="applyGate('Y')" title="Pauli-Y: бит ба фаз эргүүлнэ">Y</button>
-            <button onclick="applyGate('Z')" title="Pauli-Z: фаз эргүүлнэ">Z</button>
-            <button onclick="applyGate('S')" title="S хаалга: π/2 фаз">S</button>
-            <button onclick="applyGate('T')" title="T хаалга: π/4 фаз">T</button>
-          </div>
-        </div>
-
-        <div class="subgrid">
-          <div class="gate-section">
-            <div class="label">CNOT: удирдагч → бай</div>
-            <div class="pair">
-              <select class="select" id="cnotControl" onchange="syncSelectors()"><option value="0">q0</option><option value="1">q1</option><option value="2">q2</option></select>
-              <span class="arrow">→</span>
-              <select class="select" id="cnotTarget" onchange="syncSelectors()"><option value="0">q0</option><option value="1" selected>q1</option><option value="2">q2</option></select>
-              <button onclick="applyCNOT()">CNOT</button>
-            </div>
-          </div>
-          <div class="gate-section">
-            <div class="label">SWAP: хоёр кубитын байрыг солих</div>
-            <div class="pair">
-              <select class="select" id="swapA" onchange="syncSelectors()"><option value="0">q0</option><option value="1">q1</option><option value="2">q2</option></select>
-              <span class="arrow">↔</span>
-              <select class="select" id="swapB" onchange="syncSelectors()"><option value="0">q0</option><option value="1" selected>q1</option><option value="2">q2</option></select>
-              <button onclick="applySWAP()">SWAP</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="gate-section">
-          <div class="label">Toffoli: хоёр удирдагч → сонгосон бай</div>
-          <div class="pair">
-            <span class="hint" id="toffoliHint" style="margin:0">удирдагч q1, q2 → бай q0</span>
-            <button onclick="applyToffoli()">Toffoli</button>
-          </div>
-        </div>
-
-        <div class="gate-section">
-          <div class="label">Хэмжилт ба reset</div>
-          <div class="gate-row">
-            <button class="measure" onclick="measureAll()">Бүгдийг хэмжих</button>
-            <button class="measure" onclick="measureOne()">q<span id="measTarget">0</span>-г хэмжих</button>
-            <button class="reset" onclick="resetState(true)">|000⟩ рүү буцаах</button>
-          </div>
-          <div class="hint"><strong>Тайлбар:</strong> Төлөвийн дараалал |q0 q1 q2⟩. Жишээ нь |101⟩ гэдэг нь q0=1, q1=0, q2=1 гэсэн үг. “Хэмжих” товчийг дахин дарахад ижил хэлхээг шинээр ажиллуулж, шинэ shot авна.</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Бэлэн жишээнүүд</h2>
-        <div class="preset-row">
-          <button onclick="presetBell()">Bell хос q0–q1</button>
-          <button onclick="presetGHZ()">GHZ төлөв</button>
-          <button onclick="presetPhase()">Фазын demo</button>
-        </div>
-      </div>
-
-      <div class="card mission-card" id="mission">
-        <div class="mission-content">
-          <div class="mission-kicker">Квант даалгавар 01</div>
-          <div class="mission-title">Superposition үүсгэ. Дараа нь AI-тай суралцах эрхийг дэмж.</div>
-          <div class="mission-text">Даалгавар: <strong>q0</strong> дээр <strong>H</strong> квант хаалга буюу үйлдэгч хэрэглэ. Симулятор 50% |000⟩ ба 50% |100⟩ гэж харуулбал та анхны квант superposition-оо үүсгэлээ гэсэн үг. Гол санаа нь энэ: оюутнууд тоглож, асууж, код бичиж, ухаалаг AI хэрэгслээр суралцах боломжтой бол ямар ч хэцүү шинжлэх ухаан ойлгомжтой, хялбархан болдог.</div>
-          <div class="mission-actions">
-            <a class="mission-btn" href="https://www.uih.mn/petition/view/401" target="_blank" rel="noopener">Өргөдөлд нэгдэх</a>
-            <span class="challenge-status" id="missionStatus">Нээгдээгүй: q0 дээр H дар</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Квант хэлхээ</h2>
-        <div class="circuit-wrap">
-          <div class="circuit-placeholder" id="circuitPlaceholder">Хаалгууд хэрэглэж хэлхээгээ угсар</div>
-          <div class="circuit" id="circuit">
-            <div class="wire"><div class="wire-label" style="color:var(--q0)">q0</div><div class="wire-line" id="wire0"></div></div>
-            <div class="wire"><div class="wire-label" style="color:var(--q1)">q1</div><div class="wire-line" id="wire1"></div></div>
-            <div class="wire"><div class="wire-label" style="color:var(--q2)">q2</div><div class="wire-line" id="wire2"></div></div>
-          </div>
-        </div>
-        <div class="log" id="log"></div>
+  <div class="controls">
+    <div class="ctl"><b>Energy architecture</b>
+      <div class="seg" id="segEnergy">
+        <button data-v="hybrid" class="on">Grid + hybrid renewables</button>
+        <button data-v="grid">Grid-only</button>
       </div>
     </div>
-
-    <div class="stack">
-      <div class="card">
-        <h2>Төлөвийн вектор |ψ⟩</h2>
-        <div class="state-vector" id="stateVector"></div>
+    <div class="ctl"><b>Facility form</b>
+      <div class="seg" id="segFac">
+        <button data-v="modular" class="on">Modular 2×40 ft</button>
+        <button data-v="building">Building 166 m²</button>
       </div>
-
-      <div class="card">
-        <h2>Bloch бөмбөрцөг: нэг кубитын reduced төлөв</h2>
-        <div class="bloch-row">
-          <div class="bloch-container"><div class="bloch-label" style="color:var(--q0)">q0</div><canvas class="bloch-canvas" id="bloch0" width="190" height="190"></canvas><div class="bloch-stats" id="blochStats0"></div></div>
-          <div class="bloch-container"><div class="bloch-label" style="color:var(--q1)">q1</div><canvas class="bloch-canvas" id="bloch1" width="190" height="190"></canvas><div class="bloch-stats" id="blochStats1"></div></div>
-          <div class="bloch-container"><div class="bloch-label" style="color:var(--q2)">q2</div><canvas class="bloch-canvas" id="bloch2" width="190" height="190"></canvas><div class="bloch-stats" id="blochStats2"></div></div>
-        </div>
-        <div class="hint">Доорх тоонууд нь жинхэнэ Bloch векторын ⟨X⟩, ⟨Y⟩, ⟨Z⟩ ба урт r-г харуулна. Бөмбөрцөг нь 2D проекц тул Y чиглэл гүн рүү орж харагдаж, r=1 байсан ч богино мэт санагдаж болно.</div>
-      </div>
-
-      <div class="card">
-        <h2>Юуг анзаарах вэ?</h2>
-        <div class="explain">
-          <div class="mini"><b>Superposition</b><span>H хаалга амплитудыг хэд хэдэн basis төлөв дээр тараана. Магадлал = амплитудын квадрат хэмжээ.</span></div>
-          <div class="mini"><b>Фаз</b><span>Z, S, T хаалгууд магадлалыг шууд өөрчлөхгүйгээр фазыг өөрчилдөг. Дараагийн хаалгууд interference үүсгэхэд нөлөө нь харагдана.</span></div>
-          <div class="mini"><b>Орооцолдол</b><span>Bell/GHZ төлөвүүдэд тус бүрийн кубит mixed төлөв болж, Bloch векторын урт r 1-ээс багасна.</span></div>
-        </div>
+    </div>
+    <div class="ctl"><b>Steady-state utilization (Y3–Y5): <span id="utilLbl">85%</span></b>
+      <input type="range" id="util" min="50" max="95" value="85" step="1">
+    </div>
+    <div class="ctl"><b>Rental price</b>
+      <div class="seg" id="segPrice">
+        <button data-v="4">$4.00/hr</button>
+        <button data-v="4.5" class="on">$4.50/hr</button>
+        <button data-v="5">$5.00/hr</button>
       </div>
     </div>
   </div>
+
+  <div class="hero">
+    <div class="ht"><div class="k">Year-0 investment</div><div class="v" id="hY0">—</div><div class="n" id="hY0n"></div></div>
+    <div class="ht"><div class="k">Annual OpEx</div><div class="v" id="hOpex">—</div><div class="n">corrected power cost</div></div>
+    <div class="ht"><div class="k">Break-even utilization</div><div class="v" id="hBE">—</div><div class="n">pure rental, 5-yr simple</div></div>
+    <div class="ht"><div class="k">5-yr net (ramped rental)</div><div class="v" id="hP5">—</div><div class="n">Y1 50% · Y2 70% · then slider</div></div>
+  </div>
+
+  <!-- ================= L0 ================= -->
+  <div class="layer">
+    <div class="lhead"><span class="lnum">L0 · LAND</span><h2>Site — ~0.1 ha for the factory, the rest is energy</h2><span class="why">from GAF area sizing doc</span></div>
+    <div class="cols">
+      <svg viewBox="0 0 540 350" role="img" aria-label="To-scale site plan">
+        <!-- scale 2.5 px/m -->
+        <circle cx="360" cy="175" r="157.5" fill="none" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="6 5" id="svgSetback"><title>Wind setback r=63 m ≈ 12,500 m² — controlled, not consumed</title></circle>
+        <g id="svgSolar">
+          <rect x="272" y="97" width="79" height="156" rx="3" fill="var(--s3-wash)" stroke="var(--s3)" stroke-width="1.6"><title>Solar west block</title></rect>
+          <rect x="368" y="97" width="79" height="156" rx="3" fill="var(--s3-wash)" stroke="var(--s3)" stroke-width="1.6"><title>Solar east block</title></rect>
+          <g stroke="var(--s3)" opacity="0.4" stroke-width="0.8">
+            <line x1="272" y1="123" x2="351" y2="123"/><line x1="272" y1="149" x2="351" y2="149"/><line x1="272" y1="175" x2="351" y2="175"/><line x1="272" y1="201" x2="351" y2="201"/><line x1="272" y1="227" x2="351" y2="227"/>
+            <line x1="368" y1="123" x2="447" y2="123"/><line x1="368" y1="149" x2="447" y2="149"/><line x1="368" y1="175" x2="447" y2="175"/><line x1="368" y1="201" x2="447" y2="201"/><line x1="368" y1="227" x2="447" y2="227"/>
+          </g>
+        </g>
+        <circle cx="360" cy="175" r="6" fill="var(--surface-1)" stroke="var(--ink-1)" stroke-width="1.6" id="svgTurb"><title>150 kW turbine</title></circle>
+        <g id="svgPlot">
+          <rect x="60" y="133" width="75" height="84" rx="3" fill="none" stroke="var(--s1)" stroke-width="1.3" stroke-dasharray="2 3"><title>Fenced plot ≈ 1,000 m²</title></rect>
+          <rect x="78" y="154" width="25" height="42" rx="2" fill="var(--s1-wash)" stroke="var(--s1)" stroke-width="1.6"><title>Facility</title></rect>
+          <rect x="83" y="163" width="15" height="23" rx="1.5" fill="var(--s1)" opacity="0.9"><title>IT room 54 m²</title></rect>
+        </g>
+        <g font-size="11" fill="var(--ink-2)">
+          <text x="60" y="124">Plot ≈ 1,000 m²</text>
+          <text x="60" y="238">Facility · IT room</text>
+          <text x="272" y="88" id="lblSolar">Solar 3,926 m²</text>
+          <text x="360" y="345" text-anchor="middle" id="lblSetback">Setback Ø 126 m ≈ 12,500 m² controlled</text>
+        </g>
+        <g>
+          <line x1="60" y1="300" x2="310" y2="300" stroke="var(--ink-1)" stroke-width="1.5"/>
+          <line x1="60" y1="295" x2="60" y2="305" stroke="var(--ink-1)" stroke-width="1.5"/>
+          <line x1="310" y1="295" x2="310" y2="305" stroke="var(--ink-1)" stroke-width="1.5"/>
+          <text x="185" y="316" font-size="10.5" fill="var(--ink-2)" text-anchor="middle">100 m</text>
+        </g>
+      </svg>
+      <div>
+        <div class="kv">
+          <span class="k">IT room (built, Phase-2-ready)</span><span class="v">54 m²</span>
+          <span class="k">Facility footprint</span><span class="v" id="vFac">140 m²</span>
+          <span class="k">Outdoor plant</span><span class="v">125 m²</span>
+          <span class="k">Fenced plot</span><span class="v">≈ 1,000 m²</span>
+          <span class="k">Solar field</span><span class="v" id="vSolarA">3,926 m²</span>
+          <span class="k">Setback controlled (easement)</span><span class="v" id="vSetA">12,500 m²</span>
+          <span class="k">Land purchased</span><span class="v" id="vLand">4,926 m²</span>
+          <span class="k">Land CAPEX @ $12/m² (TBV)</span><span class="v" id="vLandC">$59k</span>
+        </div>
+        <p class="note">The data center is ~1% of the land story. Site selection is driven by the energy plan: on a constrained Ulaanbaatar plot, drop wind and go solar + PPA; on steppe land the setback costs nothing. Phase-2 (128 GPUs) needs zero extra land.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= L1 ================= -->
+  <div class="layer">
+    <div class="lhead"><span class="lnum">L1 · POWER</span><h2>Energy — 968 MWh/yr, covered by 415 kWp solar + 126 kW wind</h2><span class="why">from GAF energy doc, Eq. B–L</span></div>
+    <div class="cols">
+      <svg viewBox="0 0 540 300" role="img" aria-label="Power one-line diagram">
+        <g font-size="11.5" fill="var(--ink-1)">
+          <!-- sources -->
+          <g id="olSolar"><rect x="20" y="20" width="118" height="40" rx="8" fill="var(--s3-wash)" stroke="var(--s3)" stroke-width="1.6"/><text x="79" y="37" text-anchor="middle" font-weight="600">Solar 415 kWp</text><text x="79" y="52" text-anchor="middle" fill="var(--ink-2)" font-size="10.5">581 MWh/yr</text></g>
+          <g id="olWind"><rect x="20" y="72" width="118" height="40" rx="8" fill="var(--s3-wash)" stroke="var(--s3)" stroke-width="1.6"/><text x="79" y="89" text-anchor="middle" font-weight="600">Wind 150 kW</text><text x="79" y="104" text-anchor="middle" fill="var(--ink-2)" font-size="10.5">386 MWh/yr @ CF 0.35</text></g>
+          <g><rect x="20" y="124" width="118" height="40" rx="8" fill="none" stroke="var(--baseline)" stroke-width="1.6"/><text x="79" y="141" text-anchor="middle" font-weight="600">Grid 150–200 kW</text><text x="79" y="156" text-anchor="middle" fill="var(--ink-2)" font-size="10.5" id="olGridN">night / backup</text></g>
+          <g><rect x="20" y="176" width="118" height="40" rx="8" fill="none" stroke="var(--baseline)" stroke-width="1.6" stroke-dasharray="4 3"/><text x="79" y="193" text-anchor="middle" font-weight="600">Diesel 250 kVA</text><text x="79" y="208" text-anchor="middle" fill="var(--ink-2)" font-size="10.5">N+1 emergency only</text></g>
+          <!-- bus -->
+          <line x1="138" y1="40" x2="196" y2="40" stroke="var(--baseline)" stroke-width="1.5"/>
+          <line x1="138" y1="92" x2="196" y2="92" stroke="var(--baseline)" stroke-width="1.5"/>
+          <line x1="138" y1="144" x2="196" y2="144" stroke="var(--baseline)" stroke-width="1.5"/>
+          <line x1="138" y1="196" x2="196" y2="196" stroke="var(--baseline)" stroke-width="1.5"/>
+          <rect x="196" y="20" width="86" height="216" rx="8" fill="var(--s1-wash)" stroke="var(--s1)" stroke-width="1.6"/>
+          <text x="239" y="120" text-anchor="middle" font-weight="600">Switchgear</text><text x="239" y="136" text-anchor="middle" fill="var(--ink-2)" font-size="10.5">+ ATS</text>
+          <!-- battery + UPS -->
+          <g id="olBatt"><rect x="306" y="20" width="110" height="40" rx="8" fill="var(--s3-wash)" stroke="var(--s3)" stroke-width="1.6"/><text x="361" y="37" text-anchor="middle" font-weight="600">Battery 1 MWh</text><text x="361" y="52" text-anchor="middle" fill="var(--ink-2)" font-size="10.5">LFP · ~9 h ride-through</text></g>
+          <rect x="306" y="98" width="110" height="40" rx="8" fill="var(--s1-wash)" stroke="var(--s1)" stroke-width="1.6"/><text x="361" y="115" text-anchor="middle" font-weight="600">UPS 2N</text><text x="361" y="130" text-anchor="middle" fill="var(--ink-2)" font-size="10.5">ride to genset start</text>
+          <line x1="282" y1="40" x2="306" y2="40" stroke="var(--baseline)" stroke-width="1.5"/>
+          <line x1="282" y1="118" x2="306" y2="118" stroke="var(--baseline)" stroke-width="1.5"/>
+          <line x1="416" y1="118" x2="440" y2="118" stroke="var(--baseline)" stroke-width="1.5"/>
+          <rect x="440" y="86" width="86" height="64" rx="8" fill="var(--s1)" opacity="0.92"/><text x="483" y="113" text-anchor="middle" fill="#fff" font-weight="700">IT load</text><text x="483" y="130" text-anchor="middle" fill="#fff" font-size="10">85 kW · pk 106</text>
+          <!-- cooling -->
+          <rect x="306" y="176" width="110" height="40" rx="8" fill="none" stroke="var(--s1)" stroke-width="1.4"/><text x="361" y="193" text-anchor="middle" font-weight="600">Cooling / DLC</text><text x="361" y="208" text-anchor="middle" fill="var(--ink-2)" font-size="10.5">PUE 1.30 → +25.5 kW</text>
+          <line x1="282" y1="196" x2="306" y2="196" stroke="var(--baseline)" stroke-width="1.5"/>
+        </g>
+        <text x="20" y="270" font-size="11" fill="var(--ink-2)">Annual balance: <tspan font-weight="700" fill="var(--ink-1)">968 MWh demand</tspan> vs <tspan font-weight="700" fill="var(--s3)" id="olCover">967 MWh renewable supply (100%)</tspan></text>
+        <text x="20" y="288" font-size="10.5" fill="var(--muted)">balance ≠ autonomy: grid still carries nights and calm weeks; battery smooths hours, not seasons</text>
+      </svg>
+      <div>
+        <div class="kv">
+          <span class="k">GPU-only nameplate peak</span><span class="v">44.8 kW</span>
+          <span class="k">Average IT load</span><span class="v">85 kW</span>
+          <span class="k">Facility average / peak</span><span class="v">110.5 / 138 kW</span>
+          <span class="k">Annual facility energy</span><span class="v">968 MWh</span>
+          <span class="k">Electricity cost, grid-only</span><span class="v">$77,438/yr</span>
+          <span class="k">Electricity cost, hybrid (TBV)</span><span class="v">$20,000/yr</span>
+          <span class="k">Renewables CAPEX</span><span class="v" id="vRenC">$1,107,000</span>
+          <span class="k" style="padding-top:8px;font-weight:700;color:var(--ink-1)">Water &amp; carbon</span><span class="v" style="padding-top:8px"></span>
+          <span class="k">WUE — closed-loop DLC, dry coolers</span><span class="v">0.05 L/kWh</span>
+          <span class="k">Direct cooling water</span><span class="v">37 m³/yr</span>
+          <span class="k">vs evaporative tower design</span><span class="v">1,340 m³/yr (36×)</span>
+          <span class="k">Total water incl. grid-embedded</span><span class="v" id="vWater">47 m³/yr</span>
+          <span class="k">Total CO₂ (operational + embedded)</span><span class="v" id="vCO2">~51 tCO₂/yr</span>
+        </div>
+        <div class="warn"><b>Correction carried through this model:</b> the April TCO charged $184,000/yr for power from a 260 kW load figure that traces to the Introl source model, not this cluster. 64 × 700 W GPUs + 8 hosts cannot exceed ~106 kW IT. Corrected: $77,438/yr grid-only.</div>
+        <p class="note">Closed-loop direct-to-chip cooling means no evaporative towers, no water basin, no water permit — in water-stressed Mongolia this is a licensing and community-acceptance advantage, and it is already a stated decision criterion in the Oyu Tolgoi benchmark dashboard. Battery note: LFP cells need internal heating below −20 °C — specify arctic packs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= L2 ================= -->
+  <div class="layer">
+    <div class="lhead"><span class="lnum">L2 · FACILITY</span><h2>Facility — two ways to house it</h2><span class="why">switch above to change the model</span></div>
+    <div class="cols">
+      <div>
+        <svg viewBox="0 0 540 260" role="img" aria-label="Modular and building floor plans side by side">
+          <!-- scale ~1.9 px per 10cm → 19 px/m -->
+          <g font-size="11" fill="var(--ink-1)">
+            <text x="10" y="16" font-weight="650" id="planTitleA">Modular: 2 × 40 ft ISO on 140 m² pad</text>
+            <!-- modular: two 12.19x2.44 boxes at 13px/m -->
+            <g id="planModular">
+              <rect x="10" y="28" width="158" height="32" rx="3" fill="var(--s1-wash)" stroke="var(--s1)" stroke-width="1.6"/>
+              <text x="89" y="48" text-anchor="middle" font-size="10">IT module — 7 cabinets</text>
+              <rect x="10" y="70" width="158" height="32" rx="3" fill="none" stroke="var(--s1)" stroke-width="1.6"/>
+              <text x="89" y="90" text-anchor="middle" font-size="10.5">Power module — LV, UPS, battery</text>
+              <rect x="4" y="22" width="170" height="86" rx="4" fill="none" stroke="var(--baseline)" stroke-width="1" stroke-dasharray="3 3"/>
+              <text x="10" y="122" font-size="10" fill="var(--muted)">1.5 m clearance all round · 12.2 × 2.44 m each</text>
+            </g>
+            <text x="10" y="152" font-weight="650">Building: 166 m² gross (6 × 9 m IT room)</text>
+            <g id="planBuilding">
+              <rect x="10" y="162" width="266" height="86" rx="4" fill="none" stroke="var(--s1)" stroke-width="1.8"/>
+              <rect x="14" y="166" width="104" height="78" rx="2" fill="var(--s1-wash)" stroke="var(--s1)" stroke-width="1.3"/>
+              <text x="66" y="200" text-anchor="middle" font-size="10.5" font-weight="600">IT room 54 m²</text>
+              <text x="66" y="214" text-anchor="middle" font-size="9.5" fill="var(--ink-2)">row of 7 + Phase-2 row</text>
+              <rect x="122" y="166" width="50" height="38" rx="2" fill="none" stroke="var(--baseline)" stroke-width="1.1"/><text x="147" y="188" text-anchor="middle" font-size="9.5">Switchgear</text>
+              <rect x="122" y="206" width="50" height="38" rx="2" fill="none" stroke="var(--baseline)" stroke-width="1.1"/><text x="147" y="228" text-anchor="middle" font-size="9.5">UPS/Batt</text>
+              <rect x="176" y="166" width="48" height="38" rx="2" fill="none" stroke="var(--baseline)" stroke-width="1.1"/><text x="200" y="188" text-anchor="middle" font-size="9.5">Cooling</text>
+              <rect x="176" y="206" width="48" height="38" rx="2" fill="none" stroke="var(--baseline)" stroke-width="1.1"/><text x="200" y="228" text-anchor="middle" font-size="9.5">NOC</text>
+              <rect x="228" y="166" width="44" height="38" rx="2" fill="none" stroke="var(--baseline)" stroke-width="1.1"/><text x="250" y="188" text-anchor="middle" font-size="9.5">MMR</text>
+              <rect x="228" y="206" width="44" height="38" rx="2" fill="none" stroke="var(--baseline)" stroke-width="1.1"/><text x="250" y="228" text-anchor="middle" font-size="9.5">Spares</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <table>
+          <tr><th></th><th class="r">Modular</th><th class="r">Building</th></tr>
+          <tr><td>Footprint</td><td class="r">140 m² pad</td><td class="r">166 m² gross</td></tr>
+          <tr><td>Shell CAPEX (TBV)</td><td class="r">$150k</td><td class="r">$249k</td></tr>
+          <tr><td>Build time</td><td class="r">~4 months</td><td class="r">~9 months</td></tr>
+          <tr><td>NOC + staging inside</td><td class="r">no — site office</td><td class="r">yes</td></tr>
+          <tr><td>−40 °C winter margin</td><td class="r">needs arctic spec</td><td class="r">better</td></tr>
+          <tr><td>Phase 2 (128 GPU)</td><td class="r">3rd module</td><td class="r">2nd row, same room</td></tr>
+        </table>
+        <p class="note">Recommendation from the area doc: modular for Phase 1–2 speed (matches the deck's "Tier III-equivalent modular datacenter"), with the site master-planned for a building at Phase 3. Fit-out (power, cooling) sits in the BOM either way.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= L3 ================= -->
+  <div class="layer">
+    <div class="lhead"><span class="lnum">L3 · IT ROOM</span><h2>Racks — 7 cabinets, one row</h2><span class="why">power sets the count, not height</span></div>
+    <svg viewBox="0 0 1080 200" role="img" aria-label="Rack row elevation: seven cabinets">
+      <g font-size="11" fill="var(--ink-1)">
+        <line x1="20" y1="160" x2="1060" y2="160" stroke="var(--baseline)" stroke-width="1.5"/>
+        <!-- cabinets 110 wide -->
+        <g>
+          <rect x="30" y="30" width="110" height="130" rx="4" fill="var(--s1-wash)" stroke="var(--s1)" stroke-width="1.8"/>
+          <rect x="38" y="42" width="94" height="24" rx="2" fill="var(--s1)" opacity=".9"/><rect x="38" y="70" width="94" height="24" rx="2" fill="var(--s1)" opacity=".9"/>
+          <rect x="38" y="98" width="94" height="24" rx="2" fill="var(--s1)" opacity=".9"/><rect x="38" y="126" width="94" height="24" rx="2" fill="var(--s1)" opacity=".9"/>
+          <text x="85" y="22" text-anchor="middle" font-weight="600">Compute 1</text>
+          <title>4 × HGX 4U DLC nodes ≈ 48 kW peak</title>
+        </g>
+        <g>
+          <rect x="150" y="30" width="110" height="130" rx="4" fill="var(--s1-wash)" stroke="var(--s1)" stroke-width="1.8"/>
+          <rect x="158" y="42" width="94" height="24" rx="2" fill="var(--s1)" opacity=".9"/><rect x="158" y="70" width="94" height="24" rx="2" fill="var(--s1)" opacity=".9"/>
+          <rect x="158" y="98" width="94" height="24" rx="2" fill="var(--s1)" opacity=".9"/><rect x="158" y="126" width="94" height="24" rx="2" fill="var(--s1)" opacity=".9"/>
+          <text x="205" y="22" text-anchor="middle" font-weight="600">Compute 2</text>
+          <title>4 × HGX 4U DLC nodes ≈ 48 kW peak</title>
+        </g>
+        <g><rect x="270" y="30" width="110" height="130" rx="4" fill="none" stroke="var(--s1)" stroke-width="1.6"/><text x="325" y="22" text-anchor="middle" font-weight="600">Network</text><text x="325" y="100" text-anchor="middle" font-size="10" fill="var(--ink-2)">IB NDR spine · mgmt · head</text><title>InfiniBand NDR-400 spine, Ethernet management, login/head nodes</title></g>
+        <g><rect x="390" y="30" width="110" height="130" rx="4" fill="none" stroke="var(--s1)" stroke-width="1.6"/><text x="445" y="22" text-anchor="middle" font-weight="600">Storage</text><text x="445" y="100" text-anchor="middle" font-size="10" fill="var(--ink-2)">3.2 PB NVMe</text><title>~107 × 30 TB NVMe across 4–5 chassis</title></g>
+        <g><rect x="510" y="30" width="110" height="130" rx="4" fill="var(--s3-wash)" stroke="var(--s3)" stroke-width="1.6"/><text x="565" y="22" text-anchor="middle" font-weight="600">CDU</text><text x="565" y="100" text-anchor="middle" font-size="10" fill="var(--ink-2)">coolant loop, N+1 pumps</text><title>Coolant distribution unit — closed-loop DLC to dry coolers</title></g>
+        <g><rect x="630" y="30" width="110" height="130" rx="4" fill="none" stroke="var(--s2)" stroke-width="1.6"/><text x="685" y="22" text-anchor="middle" font-weight="600">UPS 1</text><title>UPS + battery string A</title></g>
+        <g><rect x="750" y="30" width="110" height="130" rx="4" fill="none" stroke="var(--s2)" stroke-width="1.6"/><text x="805" y="22" text-anchor="middle" font-weight="600">UPS 2</text><title>UPS + battery string B</title></g>
+        <g><rect x="870" y="30" width="110" height="130" rx="4" fill="none" stroke="var(--baseline)" stroke-width="1.4" stroke-dasharray="4 3"/><text x="925" y="22" text-anchor="middle" font-weight="600" fill="var(--ink-2)">Phase 2</text><text x="925" y="100" text-anchor="middle" font-size="10" fill="var(--muted)">growth position</text></g>
+        <text x="30" y="182" font-size="10.5" fill="var(--muted)">Why 2 compute cabinets, not 1: 8 nodes × 12 kW = 96 kW peak. One cabinet = one fault domain, one CDU manifold —</text>
+        <text x="30" y="196" font-size="10.5" fill="var(--muted)">incompatible with the Tier III-equivalent claim. Two cabinets at ~48 kW each sit under the 50 kW DLC planning limit.</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ================= L4 ================= -->
+  <div class="layer">
+    <div class="lhead"><span class="lnum">L4 · COMPUTE</span><h2>The machine itself — 8 nodes, 64 H200s</h2><span class="why">NVIDIA datasheet values</span></div>
+    <div class="cols3">
+      <div class="kv">
+        <span class="k" style="grid-column:1/3;font-weight:700;color:var(--ink-1)">Per GPU (H200 SXM)</span>
+        <span class="k">Memory</span><span class="v">141 GB HBM3e</span>
+        <span class="k">Bandwidth</span><span class="v">4.8 TB/s</span>
+        <span class="k">FP8 (sparse)</span><span class="v">3.96 PFLOPS</span>
+        <span class="k">TDP</span><span class="v">700 W</span>
+        <span class="k">Unit price (TCO)</span><span class="v">$35,000</span>
+      </div>
+      <div class="kv">
+        <span class="k" style="grid-column:1/3;font-weight:700;color:var(--ink-1)">Per node (HGX, 4U DLC)</span>
+        <span class="k">GPUs</span><span class="v">8 × H200</span>
+        <span class="k">NVLink</span><span class="v">900 GB/s</span>
+        <span class="k">Fabric</span><span class="v">8 × CX-7 NDR-400</span>
+        <span class="k">Peak power</span><span class="v">~12 kW</span>
+        <span class="k">Server price (excl. GPUs)</span><span class="v">$22,000</span>
+      </div>
+      <div class="kv">
+        <span class="k" style="grid-column:1/3;font-weight:700;color:var(--ink-1)">Cluster</span>
+        <span class="k">Total HBM</span><span class="v">9.02 TB</span>
+        <span class="k">FP8 (sparse)</span><span class="v">~253 PFLOPS</span>
+        <span class="k">All-in power / GPU</span><span class="v">1.33 kW</span>
+        <span class="k">Energy / GPU / yr</span><span class="v">15.1 MWh</span>
+        <span class="k">Electricity / GPU / yr</span><span class="v">~$1,210</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= L5 ================= -->
+  <div class="layer">
+    <div class="lhead"><span class="lnum">L5 · BOM</span><h2>Bill of materials — everything you buy</h2><span class="why">TCO prices + corrections; TBV items marked</span></div>
+    <div class="cols">
+      <table id="bomTable">
+        <tr><th>Item</th><th class="r">Qty</th><th class="r">Unit</th><th class="r">Subtotal</th></tr>
+        <tr><td>NVIDIA H200 GPU</td><td class="r">64</td><td class="r">$35,000</td><td class="r">$2,240,000</td></tr>
+        <tr><td>HGX 8-GPU server (4U DLC)</td><td class="r">8</td><td class="r">$22,000</td><td class="r">$176,000</td></tr>
+        <tr><td>InfiniBand NDR set</td><td class="r">1</td><td class="r">$320,000</td><td class="r">$320,000</td></tr>
+        <tr><td>NVMe storage 3.2 PB</td><td class="r">1</td><td class="r">$400,000</td><td class="r">$400,000</td></tr>
+        <tr><td>Power infra (PDU/UPS/genset)</td><td class="r">1</td><td class="r">$280,000</td><td class="r">$280,000</td></tr>
+        <tr><td>Cooling (DLC + dry coolers)</td><td class="r">1</td><td class="r">$200,000</td><td class="r">$200,000</td></tr>
+        <tr><td style="color:var(--ink-2)">Customs 5% + VAT 10% + shipping</td><td class="r"></td><td class="r"></td><td class="r">$635,480</td></tr>
+        <tr class="tot"><td>Hardware landed</td><td></td><td></td><td class="r">$4,251,480</td></tr>
+      </table>
+      <table>
+        <tr><th>Site, power & setup</th><th class="r">Subtotal</th></tr>
+        <tr><td>Facility shell <span id="bomFacN" style="color:var(--muted)">(modular)</span></td><td class="r" id="bomFac">$150,000</td></tr>
+        <tr><td>Grid connection (TBV)</td><td class="r">$50,000</td></tr>
+        <tr id="bomSolarR"><td>Solar 415 kWp @ $800 (TBV)</td><td class="r">$332,000</td></tr>
+        <tr id="bomWindR"><td>Wind 150 kW @ $4,200 (TBV, PNNL)</td><td class="r">$630,000</td></tr>
+        <tr id="bomBattR"><td>Battery 1 MWh @ $325 (TBV)</td><td class="r">$325,000</td></tr>
+        <tr><td>Land <span style="color:var(--muted)">(TBV)</span></td><td class="r" id="bomLand">$59,112</td></tr>
+        <tr><td>Install + training + docs</td><td class="r">$270,000</td></tr>
+        <tr class="tot"><td>Year-0 total</td><td class="r" id="bomY0">$5,887,592</td></tr>
+      </table>
+    </div>
+    <p class="note">Prices are your April-2026 TCO figures; renewables and civil items are engineering estimates flagged TBV — they need EPC quotes before an investor version. GPU street prices move quarterly: re-quote before ordering.</p>
+  </div>
+
+  <!-- ================= L6 ================= -->
+  <div class="layer">
+    <div class="lhead"><span class="lnum">L6 · ECONOMICS</span><h2>The money — CAPEX, OpEx, and when it pays back</h2><span class="why">responds to all controls above</span></div>
+    <div class="cols">
+      <div>
+        <h3 style="font-size:13px;margin:4px 0 8px;color:var(--ink-2);font-weight:600">Year-0 CAPEX composition</h3>
+        <svg viewBox="0 0 540 120" id="capexBar" role="img" aria-label="CAPEX stacked bar"></svg>
+        <h3 style="font-size:13px;margin:14px 0 8px;color:var(--ink-2);font-weight:600">Annual OpEx (<span id="opexTot2">$895,565</span>)</h3>
+        <svg viewBox="0 0 540 120" id="opexBar" role="img" aria-label="OpEx stacked bar"></svg>
+      </div>
+      <div>
+        <h3 style="font-size:13px;margin:4px 0 8px;color:var(--ink-2);font-weight:600">Cumulative cash, 5 years — rental vs blended vs AWS-price benchmark</h3>
+        <svg viewBox="0 0 540 240" id="cashChart" role="img" aria-label="Cumulative cashflow lines"></svg>
+        <div class="note" id="econNote"></div>
+      </div>
+    </div>
+    <div class="warn" style="margin-top:14px"><b>What the model shows honestly:</b> <span id="honest"></span></div>
+    <p class="note" style="margin-top:12px"><b>Relation to the 10-year financial model.</b> A separate project-finance model exists (GreenAIFactory_10yr_FinancialModel_vFINAL, Mar 2026): 80/20 debt-equity, four debt tranches, DSRA, CIT holiday, expansions to 384 GPUs. Its headline returns — equity IRR 32.1%, project IRR 23.8% — were independently re-verified (Aug 2026) and are driven by the blended services mix with escalating service rates ($7.50 → $22.50/GPU-hr), not by rental. This L6 layer deliberately remains the unlevered floor case: pure GPU rental at $4.50/hr, no debt, no services escalation — the two views bracket the business. Cross-check notes passed to that model's author: its $143k Y1 power cost should be ~$77.4k (corrected load — raises its equity IRR to ~35%); its "project NPV $7.33M" is the equity NPV (project FCFF NPV ≈ $9.0M); DSCR sits below the 1.25× covenant 2026–28.</p>
+  </div>
+
+  <p class="note" style="margin-top:4px">Sources: GAF_64GPU_Energy_Water_Carbon_Renewables_v2.md · GAF_64GPU_Facility_Area_Sizing_v1.md · Mongolia_H200_GPU_TCO reports (Apr 2026, corrected) · GPU_Pod_Benchmark_v5.xlsx · NVIDIA H200 datasheet. Externally validated Aug 2026 against NVIDIA, Uptime Institute, IRENA, NREL/PNNL, Ember, IFC and the de Vries-Gao (2026) full text — see GAF_Validation_Report_v1.md; wind cost updated to the PNNL benchmark. Companion Excel: GAF_AI_Factory_Model_v1.xlsx — same numbers, fully editable.</p>
 </div>
 
 <script>
-const N = 3;
-const DIM = 1 << N;
-const EPS = 1e-12;
-let state = [];
-let singleTarget = 0;
-let circuitOps = [];
-
-function isMeasurementOp(op){
-  return op && (op.type === 'measure_all' || op.type === 'measure_one');
-}
-function replayCircuitWithoutMeasurements(){
-  const unitaryOps = circuitOps.filter(op => !isMeasurementOp(op));
-  initState();
-  for(const op of unitaryOps){
-    if(op.type === 'single') applySingleGateRaw(op.gate, op.qubit);
-    else if(op.type === 'cnot') applyCNOTRaw(op.control, op.target);
-    else if(op.type === 'swap') applySWAPRaw(op.q1, op.q2);
-    else if(op.type === 'toffoli') applyToffoliRaw(op.c1, op.c2, op.target);
-  }
-  renormalize();
-  circuitOps = unitaryOps;
-}
-function prepareFreshShotIfRepeatedMeasurement(){
-  if(circuitOps.length && isMeasurementOp(circuitOps[circuitOps.length - 1])){
-    replayCircuitWithoutMeasurements();
-  }
-}
-
-const qColors = ['#38bdf8', '#fb923c', '#4ade80'];
-const qColorsBright = ['#7dd3fc', '#fdba74', '#86efac'];
-const basisColors = ['#38bdf8','#fb923c','#4ade80','#f472b6','#facc15','#a78bfa','#f87171','#2dd4bf'];
-
-function zeroState(){
-  return Array.from({length:DIM}, (_,i)=> i===0 ? {re:1,im:0} : {re:0,im:0});
-}
-function initState(){state = zeroState();}
-initState();
-
-function cadd(a,b){return {re:a.re+b.re, im:a.im+b.im};}
-function cmul(a,b){return {re:a.re*b.re-a.im*b.im, im:a.re*b.im+a.im*b.re};}
-function cscale(a,s){return {re:a.re*s, im:a.im*s};}
-function cnorm2(a){return a.re*a.re + a.im*a.im;}
-function cphase(a){return Math.atan2(a.im, a.re);}
-function bitMask(q){return 1 << (N - 1 - q);}
-
-const SQRT2_INV = 1/Math.sqrt(2);
-const GATES = {
-  H: [[{re:SQRT2_INV,im:0},{re:SQRT2_INV,im:0}],[{re:SQRT2_INV,im:0},{re:-SQRT2_INV,im:0}]],
-  X: [[{re:0,im:0},{re:1,im:0}],[{re:1,im:0},{re:0,im:0}]],
-  Y: [[{re:0,im:0},{re:0,im:-1}],[{re:0,im:1},{re:0,im:0}]],
-  Z: [[{re:1,im:0},{re:0,im:0}],[{re:0,im:0},{re:-1,im:0}]],
-  S: [[{re:1,im:0},{re:0,im:0}],[{re:0,im:0},{re:0,im:1}]],
-  T: [[{re:1,im:0},{re:0,im:0}],[{re:0,im:0},{re:Math.cos(Math.PI/4),im:Math.sin(Math.PI/4)}]],
+const S = { energy:'hybrid', fac:'modular', util:0.85, price:4.5 };
+const C = {
+  hwLanded:4251480, setup:270000, shellMod:150000, shellBld:249000,
+  gridConn:50000, renew:1287000, landHybrid:59112, landGrid:12000,
+  opexBase:858960, elecGrid:77438, elecHybrid:20000, renewOM:19305,
+  gpuHours:64*8760, ramp:[0.50,0.70]
 };
+const fmt$ = v => (v<0?'−$':'$')+Math.round(Math.abs(v)).toLocaleString('en-US');
+const fmtM = v => (v<0?'−$':'$')+(Math.abs(v)/1e6).toFixed(2)+'M';
 
-function applySingleGateRaw(gate, q){
-  const G = GATES[gate];
-  const mask = bitMask(q);
-  for(let i=0;i<DIM;i++){
-    if(i & mask) continue;
-    const j = i | mask;
-    const a = state[i], b = state[j];
-    state[i] = cadd(cmul(G[0][0], a), cmul(G[0][1], b));
-    state[j] = cadd(cmul(G[1][0], a), cmul(G[1][1], b));
-  }
-}
-function applyCNOTRaw(control,target){
-  if(control === target) return;
-  const cmask = bitMask(control), tmask = bitMask(target);
-  for(let i=0;i<DIM;i++){
-    if(!(i & cmask)) continue;
-    if(i & tmask) continue;
-    const j = i | tmask;
-    const tmp = state[i]; state[i] = state[j]; state[j] = tmp;
-  }
-}
-function applySWAPRaw(a,b){
-  if(a === b) return;
-  applyCNOTRaw(a,b); applyCNOTRaw(b,a); applyCNOTRaw(a,b);
-}
-function applyToffoliRaw(c1,c2,target){
-  if(c1 === c2 || c1 === target || c2 === target) return;
-  const m1 = bitMask(c1), m2 = bitMask(c2), tm = bitMask(target);
-  for(let i=0;i<DIM;i++){
-    if(!(i & m1) || !(i & m2)) continue;
-    if(i & tm) continue;
-    const j = i | tm;
-    const tmp = state[i]; state[i] = state[j]; state[j] = tmp;
-  }
-}
-function renormalize(){
-  const total = state.reduce((s,a)=>s+cnorm2(a),0);
-  if(total < EPS){initState(); return;}
-  const inv = 1/Math.sqrt(total);
-  state = state.map(a=>cscale(a, inv));
+function calc(){
+  const hy = S.energy==='hybrid';
+  const shell = S.fac==='modular'?C.shellMod:C.shellBld;
+  const land = hy?C.landHybrid:C.landGrid;
+  const renew = hy?C.renew:0;
+  const y0 = C.hwLanded + C.setup + shell + C.gridConn + renew + land;
+  const opex = C.opexBase + (hy?C.elecHybrid:C.elecGrid) + (hy?C.renewOM:0);
+  const maxRev = C.gpuHours*S.price;
+  const be = (y0/5+opex)/maxRev;
+  const utils=[...C.ramp,S.util,S.util,S.util];
+  const net = utils.map(u=>maxRev*u-opex);
+  const cum=[-y0]; net.forEach(n=>cum.push(cum[cum.length-1]+n));
+  // blended: Y1 ramp rental only, Y2+ 40 rented @slider util + 24 services @90% $8
+  const svc = 24*8760*0.90*8.0;
+  const netB = utils.map((u,i)=> i===0 ? maxRev*u-opex : (40*8760*u*S.price + svc - opex));
+  const cumB=[-y0]; netB.forEach(n=>cumB.push(cumB[cumB.length-1]+n));
+  // AWS-level comparison: all 64 rented at $7.00/hr (AWS H200 on-demand list: $7.91)
+  const maxRev7 = C.gpuHours*7.00;
+  const net7 = utils.map(u=>maxRev7*u-opex);
+  const cum7=[-y0]; net7.forEach(n=>cum7.push(cum7[cum7.length-1]+n));
+  const be7 = (y0/5+opex)/maxRev7;
+  return {y0,opex,maxRev,be,net,cum,netB,cumB,cum7,be7,shell,land,renew,hy};
 }
 
-function qName(q){return `q${q}`;}
-function getSelectInt(id){return parseInt(document.getElementById(id).value,10);}
-function setSingleTarget(q){
-  singleTarget = q;
-  document.querySelectorAll('#singleTargetButtons button').forEach((b,i)=>b.classList.toggle('active', i===q));
-  document.getElementById('measTarget').textContent = q;
-  updateToffoliHint();
-}
-function syncSelectors(){
-  const cc = document.getElementById('cnotControl'), ct = document.getElementById('cnotTarget');
-  if(cc.value === ct.value) ct.value = String((parseInt(cc.value,10)+1)%N);
-  const sa = document.getElementById('swapA'), sb = document.getElementById('swapB');
-  if(sa.value === sb.value) sb.value = String((parseInt(sa.value,10)+1)%N);
-}
-function updateToffoliHint(){
-  const controls = [0,1,2].filter(q=>q!==singleTarget);
-  document.getElementById('toffoliHint').textContent = `удирдагч ${qName(controls[0])}, ${qName(controls[1])} → бай ${qName(singleTarget)}`;
-}
-
-function applyGate(gate){
-  applySingleGateRaw(gate, singleTarget);
-  circuitOps.push({type:'single', gate, qubit:singleTarget});
-  addLog(`<span class="op">${gate}</span> on ${qName(singleTarget)}`);
-  renormalize(); render();
-}
-function applyCNOT(){
-  syncSelectors();
-  const control = getSelectInt('cnotControl'), target = getSelectInt('cnotTarget');
-  applyCNOTRaw(control,target);
-  circuitOps.push({type:'cnot', control, target});
-  addLog(`<span class="op">CNOT</span> ${qName(control)} → ${qName(target)}`);
-  renormalize(); render();
-}
-function applySWAP(){
-  syncSelectors();
-  const a = getSelectInt('swapA'), b = getSelectInt('swapB');
-  applySWAPRaw(a,b);
-  circuitOps.push({type:'swap', q1:a, q2:b});
-  addLog(`<span class="op">SWAP</span> ${qName(a)} ↔ ${qName(b)}`);
-  renormalize(); render();
-}
-function applyToffoli(){
-  const target = singleTarget;
-  const controls = [0,1,2].filter(q=>q!==target);
-  applyToffoliRaw(controls[0], controls[1], target);
-  circuitOps.push({type:'toffoli', c1:controls[0], c2:controls[1], target});
-  addLog(`<span class="op">Toffoli</span> ${qName(controls[0])}, ${qName(controls[1])} → ${qName(target)}`);
-  renormalize(); render();
+function bar(svgId, parts, total){
+  const svg=document.getElementById(svgId); svg.innerHTML='';
+  const W=540,x0=6,w=W-12,h=34,y=14; let x=x0;
+  const ns='http://www.w3.org/2000/svg';
+  parts.forEach(p=>{
+    const pw=Math.max(0,p.v/total*w-2);
+    if(pw<=0)return;
+    const r=document.createElementNS(ns,'rect');
+    r.setAttribute('x',x);r.setAttribute('y',y);r.setAttribute('width',pw);r.setAttribute('height',h);r.setAttribute('rx',4);
+    r.setAttribute('fill',p.c);if(p.o)r.setAttribute('opacity',p.o);
+    if(p.stroke){r.setAttribute('fill','none');r.setAttribute('stroke',p.c);r.setAttribute('stroke-width',1.6);}
+    const t=document.createElementNS(ns,'title');t.textContent=`${p.n}: ${fmt$(p.v)} (${(p.v/total*100).toFixed(1)}%)`;r.appendChild(t);
+    svg.appendChild(r); x+=pw+2;
+  });
+  let idx=0;
+  parts.forEach(p=>{
+    if(p.v<=0)return;
+    const col=idx%3, row=Math.floor(idx/3); idx++;
+    const lx=6+col*180, ly=70+row*19;
+    const sq=document.createElementNS(ns,'rect');
+    sq.setAttribute('x',lx);sq.setAttribute('y',ly-9);sq.setAttribute('width',10);sq.setAttribute('height',10);sq.setAttribute('rx',2);sq.setAttribute('fill',p.c);if(p.o)sq.setAttribute('opacity',p.o);
+    const tx=document.createElementNS(ns,'text');
+    tx.setAttribute('x',lx+14);tx.setAttribute('y',ly);tx.setAttribute('font-size','10.5');tx.setAttribute('fill','var(--ink-2)');
+    tx.textContent=`${p.n} ${fmtM(p.v)}`;
+    svg.appendChild(sq);svg.appendChild(tx);
+  });
 }
 
-function probabilities(){
-  const raw = state.map(cnorm2);
-  const total = raw.reduce((a,b)=>a+b,0);
-  return total > EPS ? raw.map(p=>p/total) : raw;
-}
-function measureAll(){
-  prepareFreshShotIfRepeatedMeasurement();
-  renormalize();
-  const probs = probabilities();
-  let r = Math.random(), cumulative = 0, result = DIM-1;
-  for(let i=0;i<DIM;i++){
-    cumulative += probs[i];
-    if(r <= cumulative + EPS){result = i; break;}
+function cash(svg, cum, cumB, cum7){
+  const el=document.getElementById(svg); el.innerHTML='';
+  const ns='http://www.w3.org/2000/svg';
+  const W=540,H=240,L=56,R=14,T=14,B=34;
+  const all=[...cum,...cumB,...cum7]; const lo=Math.min(...all)*1.08, hi=Math.max(...all,1)*1.15;
+  const X=i=>L+(W-L-R)*i/5, Y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+  // gridlines
+  const steps=4;
+  for(let i=0;i<=steps;i++){
+    const v=lo+(hi-lo)*i/steps, y=Y(v);
+    const ln=document.createElementNS(ns,'line');
+    ln.setAttribute('x1',L);ln.setAttribute('x2',W-R);ln.setAttribute('y1',y);ln.setAttribute('y2',y);
+    ln.setAttribute('stroke','var(--grid)');ln.setAttribute('stroke-width',1);el.appendChild(ln);
+    const t=document.createElementNS(ns,'text');
+    t.setAttribute('x',L-6);t.setAttribute('y',y+3.5);t.setAttribute('font-size','9.5');t.setAttribute('text-anchor','end');t.setAttribute('fill','var(--muted)');
+    t.textContent=fmtM(v);el.appendChild(t);
   }
-  state = Array.from({length:DIM}, (_,i)=> i===result ? {re:1,im:0} : {re:0,im:0});
-  const bits = result.toString(2).padStart(N,'0');
-  circuitOps.push({type:'measure_all', result:bits});
-  addLog(`<span class="meas">БҮГДИЙГ ХЭМЖИХ → |${bits}⟩</span>`);
-  render();
-}
-function measureOne(){
-  prepareFreshShotIfRepeatedMeasurement();
-  renormalize();
-  const q = singleTarget, mask = bitMask(q);
-  let p0 = 0;
-  for(let i=0;i<DIM;i++) if(!(i & mask)) p0 += cnorm2(state[i]);
-  p0 = Math.max(0, Math.min(1, p0));
-  const result = Math.random() < p0 ? 0 : 1;
-  const pResult = result === 0 ? p0 : 1-p0;
-  const norm = Math.sqrt(Math.max(pResult, EPS));
-  for(let i=0;i<DIM;i++){
-    const bit = (i & mask) ? 1 : 0;
-    state[i] = bit === result ? {re:state[i].re/norm, im:state[i].im/norm} : {re:0, im:0};
-  }
-  circuitOps.push({type:'measure_one', qubit:q, result});
-  addLog(`<span class="meas">${qName(q)} ХЭМЖИХ → |${result}⟩</span>`);
-  render();
-}
-function resetState(withLog=false){
-  initState(); circuitOps = [];
-  document.getElementById('log').innerHTML = '';
-  if(withLog) addLog('<span class="resetText">|000⟩ рүү буцаав</span>');
-  render();
-}
-function resetForPreset(name){
-  initState(); circuitOps = []; document.getElementById('log').innerHTML = ''; addLog(`<span class="resetText">Бэлэн жишээ: ${name}</span>`);
-}
-function presetBell(){
-  resetForPreset('Bell хос q0–q1');
-  applySingleGateRaw('H',0); circuitOps.push({type:'single',gate:'H',qubit:0});
-  applyCNOTRaw(0,1); circuitOps.push({type:'cnot',control:0,target:1});
-  addLog(`<span class="op">H q0; CNOT q0 → q1</span>`);
-  renormalize(); render();
-}
-function presetGHZ(){
-  resetForPreset('GHZ');
-  applySingleGateRaw('H',0); circuitOps.push({type:'single',gate:'H',qubit:0});
-  applyCNOTRaw(0,1); circuitOps.push({type:'cnot',control:0,target:1});
-  applyCNOTRaw(0,2); circuitOps.push({type:'cnot',control:0,target:2});
-  addLog(`<span class="op">H q0; CNOT q0 → q1; CNOT q0 → q2</span>`);
-  renormalize(); render();
-}
-function presetPhase(){
-  resetForPreset('Фазын demo');
-  applySingleGateRaw('H',0); circuitOps.push({type:'single',gate:'H',qubit:0});
-  applySingleGateRaw('T',0); circuitOps.push({type:'single',gate:'T',qubit:0});
-  applySingleGateRaw('H',0); circuitOps.push({type:'single',gate:'H',qubit:0});
-  addLog(`<span class="op">H q0; T q0; H q0</span>`);
-  renormalize(); render();
-}
-
-
-function updateMissionStatus(){
-  const el = document.getElementById('missionStatus');
-  if(!el) return;
-  const probs = probabilities();
-  const unlocked = Math.abs(probs[0] - 0.5) < 0.015 && Math.abs(probs[4] - 0.5) < 0.015 && probs.every((p,i)=> (i===0 || i===4) ? true : p < 0.015);
-  if(unlocked){
-    el.textContent = 'Нээгдлээ: superposition үүссэн ⚛️';
-    el.classList.add('unlocked');
-  } else {
-    el.textContent = 'Нээгдээгүй: q0 дээр H дар';
-    el.classList.remove('unlocked');
-  }
-}
-
-function addLog(msg){
-  const log = document.getElementById('log');
-  const d = document.createElement('div');
-  d.innerHTML = `${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} ${msg}`;
-  log.appendChild(d); log.scrollTop = log.scrollHeight;
-}
-function formatComplex(a){
-  const re = Math.abs(a.re) < 0.0005 ? 0 : a.re;
-  const im = Math.abs(a.im) < 0.0005 ? 0 : a.im;
-  const rs = re.toFixed(3);
-  const is = Math.abs(im).toFixed(3);
-  if(Math.abs(im) < 0.0005) return rs;
-  if(Math.abs(re) < 0.0005) return `${im<0?'-':''}${is}i`;
-  return `${rs}${im<0?'-':'+'}${is}i`;
-}
-
-function render(){renderStateVector(); renderCircuit(); renderBloch(); updateMissionStatus();}
-function renderStateVector(){
-  const container = document.getElementById('stateVector');
-  const probs = probabilities();
-  const maxProb = Math.max(...probs, 0.001);
-  let html = '';
-  for(let i=0;i<DIM;i++){
-    const bits = i.toString(2).padStart(N,'0');
-    const prob = probs[i];
-    const pct = (prob*100).toFixed(1);
-    const barW = (prob/maxProb*100).toFixed(1);
-    const phase = cphase(state[i]);
-    const dotX = 13 + Math.cos(phase)*8;
-    const dotY = 13 - Math.sin(phase)*8;
-    const active = prob >= 0.001;
-    html += `<div class="sv-row" style="opacity:${active?1:.32}">
-      <div class="sv-label">|${bits}⟩</div>
-      <div class="sv-bar-wrap"><div class="sv-bar" style="width:${barW}%;background:${basisColors[i]}"></div></div>
-      <div class="sv-prob">${pct}%</div>
-      <div class="sv-amp">${formatComplex(state[i])}</div>
-      <div class="sv-phase" title="phase ${(phase*180/Math.PI).toFixed(0)}°" style="border-color:${active?basisColors[i]:'transparent'}">
-        ${active ? `<div class="sv-phase-dot" style="left:${dotX}px;top:${dotY}px;background:${basisColors[i]}"></div>` : ''}
-      </div>
-    </div>`;
-  }
-  container.innerHTML = html;
-}
-function connectorFor(op,q){
-  let points = [];
-  if(op.type === 'cnot') points = [op.control, op.target];
-  else if(op.type === 'swap') points = [op.q1, op.q2];
-  else if(op.type === 'toffoli') points = [op.c1, op.c2, op.target];
-  else return '';
-  const min = Math.min(...points), max = Math.max(...points);
-  if(q < min || q > max) return '';
-  if(q === min) return '<span class="v-connector v-top"></span>';
-  if(q === max) return '<span class="v-connector v-bottom"></span>';
-  return '<span class="v-connector v-mid"></span>';
-}
-function cellFor(op,q){
-  const connector = connectorFor(op,q);
-  if(op.type === 'single'){
-    return `<div class="circuit-cell">${q===op.qubit ? `<div class="gate-marker" style="background:${qColors[q]}18;border-color:${qColors[q]};color:${qColors[q]}">${op.gate}</div>` : ''}</div>`;
-  }
-  if(op.type === 'cnot'){
-    let mark = '';
-    if(q===op.control) mark = '<div class="wire-dot"></div>';
-    if(q===op.target) mark = '<div class="gate-marker" style="background:rgba(139,92,246,.14);border-color:var(--accent);color:#ddd6fe;border-radius:50%">+</div>';
-    return `<div class="circuit-cell">${connector}${mark}</div>`;
-  }
-  if(op.type === 'swap'){
-    const mark = (q===op.q1 || q===op.q2) ? '<div class="gate-marker" style="background:rgba(139,92,246,.14);border-color:var(--accent);color:#ddd6fe">×</div>' : '';
-    return `<div class="circuit-cell">${connector}${mark}</div>`;
-  }
-  if(op.type === 'toffoli'){
-    let mark = '';
-    if(q===op.c1 || q===op.c2) mark = '<div class="wire-dot"></div>';
-    if(q===op.target) mark = '<div class="gate-marker" style="background:rgba(139,92,246,.14);border-color:var(--accent);color:#ddd6fe;border-radius:50%">+</div>';
-    return `<div class="circuit-cell">${connector}${mark}</div>`;
-  }
-  if(op.type === 'measure_all'){
-    return `<div class="circuit-cell"><div class="gate-marker" style="background:rgba(250,204,21,.12);border-color:#facc15;color:#fde68a">M</div></div>`;
-  }
-  if(op.type === 'measure_one'){
-    return `<div class="circuit-cell">${q===op.qubit ? `<div class="gate-marker" style="background:rgba(250,204,21,.12);border-color:#facc15;color:#fde68a">M</div>` : ''}</div>`;
-  }
-  return '<div class="circuit-cell"></div>';
-}
-function renderCircuit(){
-  const empty = circuitOps.length === 0;
-  document.getElementById('circuitPlaceholder').style.display = empty ? 'block' : 'none';
-  document.getElementById('circuit').style.display = empty ? 'none' : 'flex';
-  if(empty) return;
-  for(let q=0;q<N;q++) document.getElementById(`wire${q}`).innerHTML = circuitOps.map(op=>cellFor(op,q)).join('');
-}
-
-function getReducedDensityMatrix(q){
-  const mask = bitMask(q);
-  const otherMask = ((1 << N) - 1) ^ mask;
-  let rho00={re:0,im:0}, rho01={re:0,im:0}, rho10={re:0,im:0}, rho11={re:0,im:0};
-  for(let i=0;i<DIM;i++){
-    for(let j=0;j<DIM;j++){
-      if((i & otherMask) !== (j & otherMask)) continue;
-      const qi = (i & mask) ? 1 : 0;
-      const qj = (j & mask) ? 1 : 0;
-      const prod = cmul(state[i], {re:state[j].re, im:-state[j].im});
-      if(qi===0 && qj===0) rho00 = cadd(rho00, prod);
-      if(qi===0 && qj===1) rho01 = cadd(rho01, prod);
-      if(qi===1 && qj===0) rho10 = cadd(rho10, prod);
-      if(qi===1 && qj===1) rho11 = cadd(rho11, prod);
-    }
-  }
-  return {rho00,rho01,rho10,rho11};
-}
-function blochVector(q){
-  const rho = getReducedDensityMatrix(q);
-  return {
-    x: 2*rho.rho01.re,
-    y: -2*rho.rho01.im,
-    z: rho.rho00.re - rho.rho11.re
-  };
-}
-function renderBloch(){
-  const clamp = v => Math.max(-1, Math.min(1, v));
-  const fmt = v => (Math.abs(v) < 0.005 ? 0 : v).toFixed(2);
-
-  for(let q=0;q<N;q++){
-    const canvas = document.getElementById(`bloch${q}`);
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width, h = canvas.height;
-    const cx = w/2, cy = h/2 - 4, r = 58;
-    ctx.clearRect(0,0,w,h);
-
-    const bv = blochVector(q);
-    const x = clamp(bv.x), y = clamp(bv.y), z = clamp(bv.z);
-    const rLen = Math.min(1, Math.sqrt(x*x + y*y + z*z));
-
-    // Oblique 3D-to-2D projection. This is intentionally used only for drawing;
-    // the numeric chips below are the exact Bloch coordinates.
-    const project = (vx, vy, vz) => ({
-      px: cx + vx*r + vy*r*0.52,
-      py: cy - vz*r - vy*r*0.30
+  // zero line
+  if(lo<0&&hi>0){const z=document.createElementNS(ns,'line');
+    z.setAttribute('x1',L);z.setAttribute('x2',W-R);z.setAttribute('y1',Y(0));z.setAttribute('y2',Y(0));
+    z.setAttribute('stroke','var(--baseline)');z.setAttribute('stroke-width',1.5);el.appendChild(z);}
+  const draw=(data,color,label,dash,dy)=>{
+    const pts=data.map((v,i)=>`${X(i)},${Y(v)}`).join(' ');
+    const pl=document.createElementNS(ns,'polyline');
+    pl.setAttribute('points',pts);pl.setAttribute('fill','none');pl.setAttribute('stroke',color);pl.setAttribute('stroke-width',2);
+    if(dash)pl.setAttribute('stroke-dasharray','5 4');
+    el.appendChild(pl);
+    data.forEach((v,i)=>{
+      const c=document.createElementNS(ns,'circle');
+      c.setAttribute('cx',X(i));c.setAttribute('cy',Y(v));c.setAttribute('r',3.5);c.setAttribute('fill',color);
+      c.setAttribute('stroke','var(--surface-1)');c.setAttribute('stroke-width',2);
+      const ti=document.createElementNS(ns,'title');ti.textContent=`${label} Y${i}: ${fmt$(v)}`;c.appendChild(ti);
+      el.appendChild(c);
     });
-
-    const grad = ctx.createRadialGradient(cx-20,cy-24,5,cx,cy,r);
-    grad.addColorStop(0, `${qColors[q]}1f`);
-    grad.addColorStop(1, 'rgba(255,255,255,0.012)');
-    ctx.fillStyle = grad;
-    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
-
-    ctx.strokeStyle='rgba(255,255,255,.20)'; ctx.lineWidth=1.4;
-    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
-    ctx.strokeStyle='rgba(255,255,255,.11)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.ellipse(cx,cy,r,r*.34,0,0,Math.PI*2); ctx.stroke();
-
-    function drawAxis(vx,vy,vz,label, labelDx=0, labelDy=0){
-      const p1 = project(-vx,-vy,-vz);
-      const p2 = project(vx,vy,vz);
-      ctx.strokeStyle='rgba(255,255,255,.17)'; ctx.setLineDash([3,4]);
-      ctx.beginPath(); ctx.moveTo(p1.px,p1.py); ctx.lineTo(p2.px,p2.py); ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle='rgba(255,255,255,.50)'; ctx.font='700 9px IBM Plex Mono, monospace'; ctx.textAlign='center';
-      ctx.fillText(label, p2.px + labelDx, p2.py + labelDy);
-    }
-    drawAxis(1,0,0,'X',10,3);
-    drawAxis(0,1,0,'Y',10,-2);
-    drawAxis(0,0,1,'Z',0,-7);
-
-    ctx.fillStyle='#fff'; ctx.font='700 10px IBM Plex Mono, monospace'; ctx.textAlign='center';
-    ctx.fillText('|0⟩',cx,cy-r-14); ctx.fillText('|1⟩',cx,cy+r+17);
-
-    if(rLen > EPS){
-      const unit = project(x/rLen, y/rLen, z/rLen);
-      ctx.fillStyle = 'rgba(255,255,255,.18)';
-      ctx.beginPath(); ctx.arc(unit.px, unit.py, 3, 0, Math.PI*2); ctx.fill();
-    }
-
-    const p = project(x,y,z);
-    ctx.fillStyle='rgba(255,255,255,.20)'; ctx.beginPath(); ctx.arc(cx,cy,2.2,0,Math.PI*2); ctx.fill();
-    ctx.strokeStyle = `${qColors[q]}dd`; ctx.lineWidth=3;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p.px,p.py); ctx.stroke();
-
-    const glow = ctx.createRadialGradient(p.px,p.py,0,p.px,p.py,18);
-    glow.addColorStop(0,`${qColors[q]}90`); glow.addColorStop(.55,`${qColors[q]}28`); glow.addColorStop(1,'transparent');
-    ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(p.px,p.py,18,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=qColorsBright[q]; ctx.beginPath(); ctx.arc(p.px,p.py,7,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(p.px,p.py,3,0,Math.PI*2); ctx.fill();
-
-    ctx.fillStyle=qColorsBright[q]; ctx.font='700 10px IBM Plex Mono, monospace'; ctx.textAlign='center';
-    ctx.fillText(`r = ${fmt(rLen)}`,cx,h-8);
-
-    const stats = document.getElementById(`blochStats${q}`);
-    if(stats){
-      stats.innerHTML = `<span>X ${fmt(x)}</span><span>Y ${fmt(y)}</span><span>Z ${fmt(z)}</span><span>r ${fmt(rLen)}</span>`;
-    }
-  }
+    const t=document.createElementNS(ns,'text');
+    t.setAttribute('x',X(5)+2);t.setAttribute('y',Y(data[5])+dy);
+    t.setAttribute('font-size','10.5');t.setAttribute('font-weight','600');t.setAttribute('fill',color);t.setAttribute('text-anchor','end');
+    t.textContent=label;el.appendChild(t);
+  };
+  draw(cum,'var(--s1)','Rental $4.50',false,12);
+  draw(cumB,'var(--s3)','Blended',false,-6);
+  draw(cum7,'var(--s2)','All-64 @ AWS $7',true,-6);
+  for(let i=0;i<=5;i++){const t=document.createElementNS(ns,'text');
+    t.setAttribute('x',X(i));t.setAttribute('y',H-14);t.setAttribute('font-size','10');t.setAttribute('text-anchor','middle');t.setAttribute('fill','var(--muted)');
+    t.textContent='Y'+i;el.appendChild(t);}
 }
-syncSelectors(); updateToffoliHint(); render();
+
+function render(){
+  const m=calc();
+  document.getElementById('hY0').textContent=fmtM(m.y0);
+  document.getElementById('hY0n').textContent=`${S.fac==='modular'?'modular':'building'} · ${m.hy?'incl. $1.29M renewables':'grid-only'}`;
+  document.getElementById('hOpex').textContent=fmt$(m.opex);
+  document.getElementById('hBE').textContent=(m.be*100).toFixed(1)+'%';
+  const p5=m.cum[5];
+  const el5=document.getElementById('hP5');
+  el5.textContent=fmtM(p5); el5.style.color=p5<0?'var(--neg)':'inherit';
+  // L0
+  document.getElementById('vFac').textContent=S.fac==='modular'?'140 m²':'166 m²';
+  document.getElementById('vSolarA').textContent=m.hy?'3,926 m²':'—';
+  document.getElementById('vSetA').textContent=m.hy?'12,500 m²':'—';
+  document.getElementById('vLand').textContent=m.hy?'4,926 m²':'1,000 m²';
+  document.getElementById('vLandC').textContent=fmt$(m.land);
+  ['svgSetback','svgSolar','svgTurb'].forEach(id=>document.getElementById(id).style.opacity=m.hy?1:0.13);
+  document.getElementById('lblSolar').style.opacity=m.hy?1:0.25;
+  document.getElementById('lblSetback').style.opacity=m.hy?1:0.25;
+  ['olSolar','olWind','olBatt'].forEach(id=>document.getElementById(id).style.opacity=m.hy?1:0.18);
+  document.getElementById('olGridN').textContent=m.hy?'night / backup':'primary supply';
+  document.getElementById('olCover').textContent=m.hy?'967 MWh renewable supply (100%)':'0 MWh renewable (grid-only)';
+  document.getElementById('vRenC').textContent=m.hy?'$1,287,000':'$0 (deferred to Phase 3)';
+  document.getElementById('vWater').textContent=m.hy?'47 m³/yr':'2,457 m³/yr (grid-embedded, TBV)';
+  document.getElementById('vCO2').textContent=m.hy?'~51 tCO₂/yr':'~844 tCO₂/yr';
+  // BOM
+  document.getElementById('bomFac').textContent=fmt$(m.shell);
+  document.getElementById('bomFacN').textContent=S.fac==='modular'?'(modular)':'(building)';
+  ['bomSolarR','bomWindR','bomBattR'].forEach(id=>document.getElementById(id).style.opacity=m.hy?1:0.35);
+  document.getElementById('bomLand').textContent=fmt$(m.land);
+  document.getElementById('bomY0').textContent=fmt$(m.y0);
+  // bars
+  bar('capexBar',[
+    {n:'GPUs',v:2240000,c:'var(--s1)'},
+    {n:'Servers+net+storage',v:896000,c:'var(--s1)',o:0.55},
+    {n:'Power+cooling',v:480000,c:'var(--s2)'},
+    {n:'Tax+ship',v:635480,c:'var(--s2)',o:0.5},
+    {n:'Setup',v:270000,c:'var(--muted)',o:0.6},
+    {n:'Facility+land+grid',v:m.shell+m.land+C.gridConn,c:'var(--s1-deep)'},
+    {n:'Renewables',v:m.renew,c:'var(--s3)'},
+  ],m.y0);
+  bar('opexBar',[
+    {n:'Personnel',v:282000,c:'var(--s1)'},
+    {n:'Network',v:180000,c:'var(--s1)',o:0.55},
+    {n:'Software',v:168000,c:'var(--s2)',o:0.7},
+    {n:'HW maint.',v:180800,c:'var(--s2)'},
+    {n:'Insurance',v:36160,c:'var(--muted)',o:0.6},
+    {n:'Electricity',v:m.hy?C.elecHybrid:C.elecGrid,c:'var(--s3)'},
+    {n:'Other',v:12000+(m.hy?C.renewOM:0),c:'var(--muted)',o:0.35},
+  ],m.opex);
+  document.getElementById('opexTot2').textContent=fmt$(m.opex);
+  cash('cashChart',m.cum,m.cumB,m.cum7);
+  // notes
+  document.getElementById('econNote').innerHTML=
+    `At ${Math.round(S.util*100)}% steady utilization: rental at $${S.price.toFixed(2)}/hr cumulative Y5 = <b>${fmtM(m.cum[5])}</b>; blended (40 rented + 24 in managed services @ $8/hr eff.) = <b>${fmtM(m.cumB[5])}</b>; all 64 rented at the AWS price level of $7.00/hr = <b>${fmtM(m.cum7[5])}</b> (break-even at just <b>${(m.be7*100).toFixed(0)}%</b> utilization). AWS actually lists H200 on-demand at $7.91/GPU-hr — the dashed line is what this exact fleet earns at hyperscaler pricing, and the gap to the blue line is the price of competing from Mongolia. Break-even pure rental at $${S.price.toFixed(2)}: <b>${(m.be*100).toFixed(1)}%</b>.`;
+  document.getElementById('honest').textContent =
+    m.hy
+    ? `Pure rental at these settings ${m.cum[5]<0?'does NOT recover':'recovers'} the hybrid Year-0 by Y5 — on-site renewables add $1.29M CAPEX (wind at the PNNL $4,200/kW benchmark) but save only ~$57k/yr gross (~$38k net of O&M) at $0.08/kWh, so they don't pay back in 5 years on power savings alone. They pay in the carbon story, tariff hedging, sovereignty, and Phase-3 scaling. The deck's managed-services mix is what carries the margin — protect it.`
+    : `Grid-only lowers Year-0 to ${fmtM(m.y0)} and break-even to ${(m.be*100).toFixed(1)}%, but abandons the 'Green' in Green AI Factory for Phase 1 and leaves ~823 tCO₂/yr on the Mongolian grid. If chosen, secure the renewable land option now and frame renewables as the committed Phase 3.`;
+}
+
+document.querySelectorAll('.seg').forEach(seg=>{
+  seg.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b)return;
+    seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    if(seg.id==='segEnergy')S.energy=b.dataset.v==='hybrid'?'hybrid':'grid';
+    if(seg.id==='segFac')S.fac=b.dataset.v;
+    if(seg.id==='segPrice')S.price=parseFloat(b.dataset.v);
+    render();
+  });
+});
+document.getElementById('util').addEventListener('input',e=>{
+  S.util=e.target.value/100;
+  document.getElementById('utilLbl').textContent=e.target.value+'%';
+  render();
+});
+render();
 </script>
 </body>
 </html>
