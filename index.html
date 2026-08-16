@@ -78,7 +78,7 @@
 <body>
 <div class="viz-root">
   <h1>Green AI Factory — the 64-GPU build, from the ground up</h1>
-  <p class="sub">One blueprint where the physical design and the economics are the same numbers. Read it bottom-up: land → power → facility → racks → compute → bill of materials → economics. Every figure traces to the GAF energy doc, the area sizing doc, and the corrected April-2026 TCO. Change the scenario controls — everything below recomputes, matching the Excel model.</p>
+  <p class="sub">One blueprint where the physical design and the economics are the same numbers. Read it bottom-up: land → power → facility → racks → compute → bill of materials → economics.</p>
 
   <div class="controls">
     <div class="ctl"><b>Energy architecture</b>
@@ -544,15 +544,7 @@ function render(){
   document.getElementById('opexTot2').textContent=fmt$(m.opex);
   cash('cashChart',m.cum,m.cumB,m.cum7);
   // notes
-  document.getElementById('econNote').innerHTML=
-    `At ${Math.round(S.util*100)}% steady utilization: rental at $${S.price.toFixed(2)}/hr cumulative Y5 = <b>${fmtM(m.cum[5])}</b>; blended (40 rented + 24 in managed services @ $8/hr eff.) = <b>${fmtM(m.cumB[5])}</b>; all 64 rented at the AWS price level of $7.00/hr = <b>${fmtM(m.cum7[5])}</b> (break-even at just <b>${(m.be7*100).toFixed(0)}%</b> utilization). AWS actually lists H200 on-demand at $7.91/GPU-hr — the dashed line is what this exact fleet earns at hyperscaler pricing, and the gap to the blue line is the price of competing from Mongolia. Break-even pure rental at $${S.price.toFixed(2)}: <b>${(m.be*100).toFixed(1)}%</b>.`;
-  document.getElementById('honest').textContent =
-    m.hy
-    ? `Pure rental at these settings ${m.cum[5]<0?'does NOT recover':'recovers'} the hybrid Year-0 by Y5 — on-site renewables add $1.29M CAPEX (wind at the PNNL $4,200/kW benchmark) but save only ~$57k/yr gross (~$38k net of O&M) at $0.08/kWh, so they don't pay back in 5 years on power savings alone. They pay in the carbon story, tariff hedging, sovereignty, and Phase-3 scaling. The deck's managed-services mix is what carries the margin — protect it.`
-    : `Grid-only lowers Year-0 to ${fmtM(m.y0)} and break-even to ${(m.be*100).toFixed(1)}%, but abandons the 'Green' in Green AI Factory for Phase 1 and leaves ~823 tCO₂/yr on the Mongolian grid. If chosen, secure the renewable land option now and frame renewables as the committed Phase 3.`;
-}
-
-document.querySelectorAll('.seg').forEach(seg=>{
+  document.getElementById('econNote').innerHTML
   seg.addEventListener('click',e=>{
     const b=e.target.closest('button'); if(!b)return;
     seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
