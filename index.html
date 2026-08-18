@@ -102,6 +102,13 @@
         <button data-v="5">$5.00/hr</button>
       </div>
     </div>
+    <div class="ctl"><b>EU-pattern anchor offtake</b>
+      <div class="seg" id="segOfftake">
+        <button data-v="0" class="on">Off</button>
+        <button data-v="17">17% CAPEX</button>
+        <button data-v="34">34% matched</button>
+      </div>
+    </div>
   </div>
 
   <div class="hero">
@@ -201,7 +208,7 @@
           <span class="k">Annual facility energy</span><span class="v">968 MWh</span>
           <span class="k">Electricity cost, grid-only</span><span class="v">$77,438/yr</span>
           <span class="k">Electricity cost, hybrid (TBV)</span><span class="v">$20,000/yr</span>
-          <span class="k">Renewables CAPEX</span><span class="v" id="vRenC">$1,107,000</span>
+          <span class="k">Renewables CAPEX</span><span class="v" id="vRenC">$1,287,000</span>
           <span class="k" style="padding-top:8px;font-weight:700;color:var(--ink-1)">Water &amp; carbon</span><span class="v" style="padding-top:8px"></span>
           <span class="k">WUE — closed-loop DLC, dry coolers</span><span class="v">0.05 L/kWh</span>
           <span class="k">Direct cooling water</span><span class="v">37 m³/yr</span>
@@ -352,7 +359,7 @@
         <tr id="bomBattR"><td>Battery 1 MWh @ $325 (TBV)</td><td class="r">$325,000</td></tr>
         <tr><td>Land <span style="color:var(--muted)">(TBV)</span></td><td class="r" id="bomLand">$59,112</td></tr>
         <tr><td>Install + training + docs</td><td class="r">$270,000</td></tr>
-        <tr class="tot"><td>Year-0 total</td><td class="r" id="bomY0">$5,887,592</td></tr>
+        <tr class="tot"><td>Year-0 total</td><td class="r" id="bomY0">$6,067,592</td></tr>
       </table>
     </div>
     <p class="note">Prices are your April-2026 TCO figures; renewables and civil items are engineering estimates flagged TBV — they need EPC quotes before an investor version. GPU street prices move quarterly: re-quote before ordering.</p>
@@ -365,7 +372,7 @@
       <div>
         <h3 style="font-size:13px;margin:4px 0 8px;color:var(--ink-2);font-weight:600">Year-0 CAPEX composition</h3>
         <svg viewBox="0 0 540 120" id="capexBar" role="img" aria-label="CAPEX stacked bar"></svg>
-        <h3 style="font-size:13px;margin:14px 0 8px;color:var(--ink-2);font-weight:600">Annual OpEx (<span id="opexTot2">$895,565</span>)</h3>
+        <h3 style="font-size:13px;margin:14px 0 8px;color:var(--ink-2);font-weight:600">Annual OpEx (<span id="opexTot2">$898,265</span>)</h3>
         <svg viewBox="0 0 540 120" id="opexBar" role="img" aria-label="OpEx stacked bar"></svg>
       </div>
       <div>
@@ -374,14 +381,26 @@
         <div class="note" id="econNote"></div>
       </div>
     </div>
+    <div class="cols" style="margin-top:14px">
+      <div class="kv">
+        <span class="k" style="font-weight:700;color:var(--ink-1)">EU-pattern anchor offtake (EuroHPC AIGF mechanism)</span><span class="v"></span>
+        <span class="k">IT CAPEX basis (hardware landed)</span><span class="v">$4,251,480</span>
+        <span class="k">Anchor pre-purchase @ 17% of IT CAPEX</span><span class="v">$722,752 / 5 yrs</span>
+        <span class="k">— contracted floor per year</span><span class="v">$144,550 (16% of OpEx)</span>
+        <span class="k">Matched structure @ 34% (2nd anchor / state)</span><span class="v">$1,445,503 / 5 yrs</span>
+        <span class="k">— contracted floor per year</span><span class="v">$289,101 (32% of OpEx)</span>
+        <span class="k">Floor in GPU terms @ $8/hr, 90%</span><span class="v">2.3 / 4.6 GPU-equivalents</span>
+      </div>
+      <p class="note" style="margin-top:0">This is how the EU de-risks its €10bn Gigafactories: the public side acts as <b>anchor customer</b>, pre-purchasing compute access worth up to 17% of IT CAPEX (matched by the host state), paid from operational readiness over 5 years, with expansion funds released only after obligations are met and a technical audit passes. Applied to GAF: Oyu Tolgoi (and optionally a second anchor) signs a 5-year offtake at L2/L3 rates. Toggle it in the controls — the floor lifts the blended curve's Year 1 and makes the weak DSCR years (2026–28 in the 10-yr model) lender-visible. The offtake is not extra revenue; it is the services revenue made contractual.</p>
+    </div>
     <p class="note" style="margin-top:12px"><b>Relation to the 10-year financial model.</b> A separate project-finance model exists (GreenAIFactory_10yr_FinancialModel_vFINAL, Mar 2026): 80/20 debt-equity, four debt tranches, DSRA, CIT holiday, expansions to 384 GPUs. Its headline returns — equity IRR 32.1%, project IRR 23.8% — were independently re-verified (Aug 2026) and are driven by the blended services mix with escalating service rates ($7.50 → $22.50/GPU-hr), not by rental. This L6 layer deliberately remains the unlevered floor case: pure GPU rental at $4.50/hr, no debt, no services escalation — the two views bracket the business. Cross-check notes passed to that model's author: its $143k Y1 power cost should be ~$77.4k (corrected load — raises its equity IRR to ~35%); its "project NPV $7.33M" is the equity NPV (project FCFF NPV ≈ $9.0M); DSCR sits below the 1.25× covenant 2026–28.</p>
   </div>
 
-  <p class="note" style="margin-top:4px">Sources: GAF_64GPU_Energy_Water_Carbon_Renewables_v2.md · GAF_64GPU_Facility_Area_Sizing_v1.md · Mongolia_H200_GPU_TCO reports (Apr 2026, corrected) · GPU_Pod_Benchmark_v5.xlsx · NVIDIA H200 datasheet. Externally validated Aug 2026 against NVIDIA, Uptime Institute, IRENA, NREL/PNNL, Ember, IFC and the de Vries-Gao (2026) full text — see GAF_Validation_Report_v1.md; wind cost updated to the PNNL benchmark. Companion Excel: GAF_AI_Factory_Model_v1.xlsx — same numbers, fully editable.</p>
+  <p class="note" style="margin-top:4px">Sources: GAF_64GPU_Energy_Water_Carbon_Renewables_v2.md · GAF_64GPU_Facility_Area_Sizing_v1.md · Mongolia_H200_GPU_TCO reports (Apr 2026, corrected) · GPU_Pod_Benchmark_v5.xlsx · NVIDIA H200 datasheet. Externally validated Aug 2026 against NVIDIA, Uptime Institute, IRENA, NREL/PNNL, Ember, IFC and the de Vries-Gao (2026) full text — see GAF_Validation_Report_v1.md; wind cost updated to the PNNL benchmark. Benchmarked against all 55 applicable EuroHPC AI-factory requirements (GAF-64-CMP-0001); ten adopted into the engineering spec GAF-64-ENG-0001 Rev B. Companion Excel: GAF_AI_Factory_Model_v1.xlsx — same numbers, fully editable.</p>
 </div>
 
 <script>
-const S = { energy:'hybrid', fac:'modular', util:0.85, price:4.5 };
+const S = { energy:'hybrid', fac:'modular', util:0.85, price:4.5, offtake:0 };
 const C = {
   hwLanded:4251480, setup:270000, shellMod:150000, shellBld:249000,
   gridConn:50000, renew:1287000, landHybrid:59112, landGrid:12000,
@@ -404,8 +423,11 @@ function calc(){
   const net = utils.map(u=>maxRev*u-opex);
   const cum=[-y0]; net.forEach(n=>cum.push(cum[cum.length-1]+n));
   // blended: Y1 ramp rental only, Y2+ 40 rented @slider util + 24 services @90% $8
+  // EU-pattern offtake: anchor pre-purchases compute worth 17%/34% of IT CAPEX ($4.2515M)
+  // over 5 yrs — a contractual FLOOR under the services stream (EuroHPC AIGF mechanism)
+  const floor = 4251480*(S.offtake/100)/5;
   const svc = 24*8760*0.90*8.0;
-  const netB = utils.map((u,i)=> i===0 ? maxRev*u-opex : (40*8760*u*S.price + svc - opex));
+  const netB = utils.map((u,i)=> i===0 ? (maxRev*u + (S.offtake?floor:0) - opex) : (40*8760*u*S.price + Math.max(svc,floor) - opex));
   const cumB=[-y0]; netB.forEach(n=>cumB.push(cumB[cumB.length-1]+n));
   // AWS-level comparison: all 64 rented at $7.00/hr (AWS H200 on-demand list: $7.91)
   const maxRev7 = C.gpuHours*7.00;
@@ -543,7 +565,7 @@ function render(){
   cash('cashChart',m.cum,m.cumB,m.cum7);
   // notes
   document.getElementById('econNote').innerHTML=
-    `At ${Math.round(S.util*100)}% steady utilization: rental at $${S.price.toFixed(2)}/hr cumulative Y5 = <b>${fmtM(m.cum[5])}</b>; blended (40 rented + 24 in managed services @ $8/hr eff.) = <b>${fmtM(m.cumB[5])}</b>; all 64 rented at the AWS price level of $7.00/hr = <b>${fmtM(m.cum7[5])}</b> (break-even at just <b>${(m.be7*100).toFixed(0)}%</b> utilization). AWS actually lists H200 on-demand at $7.91/GPU-hr — the dashed line is what this exact fleet earns at hyperscaler pricing, and the gap to the blue line is the price of competing from Mongolia. Break-even pure rental at $${S.price.toFixed(2)}: <b>${(m.be*100).toFixed(1)}%</b>.`;
+    `At ${Math.round(S.util*100)}% steady utilization: rental at $${S.price.toFixed(2)}/hr cumulative Y5 = <b>${fmtM(m.cum[5])}</b>; blended (40 rented + 24 in managed services @ $8/hr eff.) = <b>${fmtM(m.cumB[5])}</b>; all 64 rented at the AWS price level of $7.00/hr = <b>${fmtM(m.cum7[5])}</b> (break-even at just <b>${(m.be7*100).toFixed(0)}%</b> utilization). AWS actually lists H200 on-demand at $7.91/GPU-hr — the dashed line is what this exact fleet earns at hyperscaler pricing, and the gap to the blue line is the price of competing from Mongolia. Break-even pure rental at $${S.price.toFixed(2)}: <b>${(m.be*100).toFixed(1)}%</b>.${S.offtake?` <b>EU-pattern offtake ON (${S.offtake}% of IT CAPEX):</b> contracted floor of ${fmt$(4251480*S.offtake/100/5)}/yr lifts blended Y1 and de-risks the ramp years.`:''}`;
 }
 
 document.querySelectorAll('.seg').forEach(seg=>{
@@ -554,6 +576,7 @@ document.querySelectorAll('.seg').forEach(seg=>{
     if(seg.id==='segEnergy')S.energy=b.dataset.v==='hybrid'?'hybrid':'grid';
     if(seg.id==='segFac')S.fac=b.dataset.v;
     if(seg.id==='segPrice')S.price=parseFloat(b.dataset.v);
+    if(seg.id==='segOfftake')S.offtake=parseFloat(b.dataset.v);
     render();
   });
 });
