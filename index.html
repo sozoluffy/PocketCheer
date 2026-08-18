@@ -208,7 +208,7 @@
           <span class="k">Annual facility energy</span><span class="v">968 MWh</span>
           <span class="k">Electricity cost, grid-only</span><span class="v">$77,438/yr</span>
           <span class="k">Electricity cost, hybrid (TBV)</span><span class="v">$20,000/yr</span>
-          <span class="k">Renewables CAPEX</span><span class="v" id="vRenC">$1,287,000</span>
+          <span class="k">Renewables CAPEX</span><span class="v" id="vRenC">$1,107,000</span>
           <span class="k" style="padding-top:8px;font-weight:700;color:var(--ink-1)">Water &amp; carbon</span><span class="v" style="padding-top:8px"></span>
           <span class="k">WUE — closed-loop DLC, dry coolers</span><span class="v">0.05 L/kWh</span>
           <span class="k">Direct cooling water</span><span class="v">37 m³/yr</span>
@@ -359,7 +359,7 @@
         <tr id="bomBattR"><td>Battery 1 MWh @ $325 (TBV)</td><td class="r">$325,000</td></tr>
         <tr><td>Land <span style="color:var(--muted)">(TBV)</span></td><td class="r" id="bomLand">$59,112</td></tr>
         <tr><td>Install + training + docs</td><td class="r">$270,000</td></tr>
-        <tr class="tot"><td>Year-0 total</td><td class="r" id="bomY0">$6,067,592</td></tr>
+        <tr class="tot"><td>Year-0 total</td><td class="r" id="bomY0">$5,887,592</td></tr>
       </table>
     </div>
     <p class="note">Prices are your April-2026 TCO figures; renewables and civil items are engineering estimates flagged TBV — they need EPC quotes before an investor version. GPU street prices move quarterly: re-quote before ordering.</p>
@@ -372,7 +372,7 @@
       <div>
         <h3 style="font-size:13px;margin:4px 0 8px;color:var(--ink-2);font-weight:600">Year-0 CAPEX composition</h3>
         <svg viewBox="0 0 540 120" id="capexBar" role="img" aria-label="CAPEX stacked bar"></svg>
-        <h3 style="font-size:13px;margin:14px 0 8px;color:var(--ink-2);font-weight:600">Annual OpEx (<span id="opexTot2">$898,265</span>)</h3>
+        <h3 style="font-size:13px;margin:14px 0 8px;color:var(--ink-2);font-weight:600">Annual OpEx (<span id="opexTot2">$895,565</span>)</h3>
         <svg viewBox="0 0 540 120" id="opexBar" role="img" aria-label="OpEx stacked bar"></svg>
       </div>
       <div>
@@ -393,7 +393,7 @@
       </div>
       <p class="note" style="margin-top:0">This is how the EU de-risks its €10bn Gigafactories: the public side acts as <b>anchor customer</b>, pre-purchasing compute access worth up to 17% of IT CAPEX (matched by the host state), paid from operational readiness over 5 years, with expansion funds released only after obligations are met and a technical audit passes. Applied to GAF: Oyu Tolgoi (and optionally a second anchor) signs a 5-year offtake at L2/L3 rates. Toggle it in the controls — the floor lifts the blended curve's Year 1 and makes the weak DSCR years (2026–28 in the 10-yr model) lender-visible. The offtake is not extra revenue; it is the services revenue made contractual.</p>
     </div>
-    <p class="note" style="margin-top:12px"><b>Relation to the 10-year financial model.</b> A separate project-finance model exists (GreenAIFactory_10yr_FinancialModel_vFINAL, Mar 2026): 80/20 debt-equity, four debt tranches, DSRA, CIT holiday, expansions to 384 GPUs. Its headline returns — equity IRR 32.1%, project IRR 23.8% — were independently re-verified (Aug 2026) and are driven by the blended services mix with escalating service rates ($7.50 → $22.50/GPU-hr), not by rental. This L6 layer deliberately remains the unlevered floor case: pure GPU rental at $4.50/hr, no debt, no services escalation — the two views bracket the business. Cross-check notes passed to that model's author: its $143k Y1 power cost should be ~$77.4k (corrected load — raises its equity IRR to ~35%); its "project NPV $7.33M" is the equity NPV (project FCFF NPV ≈ $9.0M); DSCR sits below the 1.25× covenant 2026–28.</p>
+    <p class="note" style="margin-top:12px"><b>Relation to the 10-year financial model.</b> A separate project-finance model exists (GreenAIFactory_10yr_FinancialModel_vFINAL, Mar 2026): 80/20 debt-equity, four debt tranches, DSRA, CIT holiday, expansions to 384 GPUs. Its headline returns — equity IRR 32.1%, project IRR 23.8% — were independently re-verified (Aug 2026) and are driven by the blended services mix with escalating service rates ($7.50 → $22.50/GPU-hr), not by rental. This L6 layer deliberately remains the unlevered floor case: pure GPU rental at $4.50/hr, no debt, no services escalation — the two views bracket the business. Full audit 18 Aug 2026 (VAL-0001 §E.1): all seven sheets re-derived independently — every year reproduces to the cent; equity IRR 32.07%, project IRR 23.81% pre-tax (≈21.5% after tax), NPV cell $7,329,245 = equity NPV (FCFF $9.03M), MOIC 9.19× cash-on-cash (quote 9–10×, not 15×). Watch-items: the AI-services rate multiplies $7.50 by customer count on the same GPU pool — at a flat $7.50 the 10-yr cumulative FCFE flips +$25.1M → −$7.4M, so contracted offtakes are the case; DSCR breaches the 1.25× covenant in 2026/27/28 (1.02/0.53/1.13, DSRA covers only the 2027 cash gap); book equity negative 2027–28; 2028 ending cash $6.6k; Y1 power $143k vs engineering $77.4k (fix lifts equity IRR to ~35%).</p>
   </div>
 
   <p class="note" style="margin-top:4px">Sources: GAF_64GPU_Energy_Water_Carbon_Renewables_v2.md · GAF_64GPU_Facility_Area_Sizing_v1.md · Mongolia_H200_GPU_TCO reports (Apr 2026, corrected) · GPU_Pod_Benchmark_v5.xlsx · NVIDIA H200 datasheet. Externally validated Aug 2026 against NVIDIA, Uptime Institute, IRENA, NREL/PNNL, Ember, IFC and the de Vries-Gao (2026) full text — see GAF_Validation_Report_v1.md; wind cost updated to the PNNL benchmark. Benchmarked against all 55 applicable EuroHPC AI-factory requirements (GAF-64-CMP-0001); ten adopted into the engineering spec GAF-64-ENG-0001 Rev B. Companion Excel: GAF_AI_Factory_Model_v1.xlsx — same numbers, fully editable.</p>
